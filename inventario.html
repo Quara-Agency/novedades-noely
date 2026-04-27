@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novedades Noely — Inventario</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar" role="navigation" aria-label="Menú principal">
+    <div class="sidebar-logo">
+      <svg class="sidebar-logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="4" fill="#F472B6"/>
+        <ellipse cx="16" cy="8"  rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="16" cy="24" rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="8"  cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="24" cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="10.3" cy="10.3" rx="3" ry="5" transform="rotate(-45 10.3 10.3)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="21.7" rx="3" ry="5" transform="rotate(-45 21.7 21.7)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="10.3" rx="3" ry="5" transform="rotate(45 21.7 10.3)"  fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="10.3" cy="21.7" rx="3" ry="5" transform="rotate(45 10.3 21.7)"  fill="#DB2777" opacity="0.45"/>
+      </svg>
+      <div>
+        <div class="sidebar-logo-texto">Novedades Noely</div>
+        <div class="sidebar-logo-subtitulo">Panel de administración</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <i data-lucide="layout-dashboard" class="nav-icono"></i>
+        Inicio
+      </a>
+      <div class="sidebar-seccion-titulo">Negocio</div>
+      <a href="inventario.html" class="nav-item activo" id="nav-inventario">
+        <i data-lucide="package" class="nav-icono"></i>
+        Inventario
+        <span class="nav-badge" id="badge-stock-bajo" style="display:none"></span>
+      </a>
+      <a href="pedidos.html" class="nav-item" id="nav-pedidos">
+        <i data-lucide="shopping-bag" class="nav-icono"></i>
+        Pedidos
+      </a>
+      <a href="clientes.html" class="nav-item" id="nav-clientes">
+        <i data-lucide="users" class="nav-icono"></i>
+        Clientes
+      </a>
+      <div class="sidebar-seccion-titulo">Dinero</div>
+      <a href="finanzas.html" class="nav-item" id="nav-finanzas">
+        <i data-lucide="bar-chart-2" class="nav-icono"></i>
+        Finanzas
+      </a>
+    </nav>
+
+    <div class="sidebar-flor" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="8" fill="currentColor"/>
+        <ellipse cx="40" cy="18" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="40" cy="62" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="18" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="62" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="23" cy="23" rx="7" ry="13" transform="rotate(-45 23 23)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="57" rx="7" ry="13" transform="rotate(-45 57 57)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="23" rx="7" ry="13" transform="rotate(45 57 23)"  fill="currentColor" opacity="0.6"/>
+        <ellipse cx="23" cy="57" rx="7" ry="13" transform="rotate(45 23 57)"  fill="currentColor" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="nav-item w-full" onclick="cerrarSesion()">
+        <i data-lucide="log-out" class="nav-icono"></i>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="contenido-principal">
+
+    <header class="pagina-header">
+      <div class="pagina-header-texto">
+        <h1>Inventario</h1>
+        <p>Productos y materiales</p>
+      </div>
+      <button onclick="abrirModalProducto()" class="btn btn-primario">
+        <i data-lucide="plus" class="icono"></i>
+        Agregar producto
+      </button>
+    </header>
+
+    <div class="pagina-cuerpo">
+
+      <div id="banner-stock-bajo" style="display:none; margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--alerta-bg);border:1px solid #FECACA;border-radius:var(--radio-md);font-size:13px;color:var(--alerta-txt);">
+          <i data-lucide="alert-triangle" style="width:16px;height:16px;flex-shrink:0;"></i>
+          <span id="banner-stock-texto"></span>
+        </div>
+      </div>
+
+      <div class="tarjeta animar-entrada">
+        <div class="tarjeta-cabecera">
+          <span class="tarjeta-titulo">Todos los productos</span>
+          <span class="badge badge-rosa" id="conteo-productos" style="display:none"></span>
+        </div>
+
+        <div class="estado-vacio" id="estado-vacio-inventario" style="display:none;">
+          <i data-lucide="package" class="estado-vacio-icono"></i>
+          <div class="estado-vacio-titulo">Sin productos aún</div>
+          <p>Agrega tu primer producto para empezar a controlar tu inventario.</p>
+          <button onclick="abrirModalProducto()" class="btn btn-primario">
+            <i data-lucide="plus" class="icono"></i>
+            Agregar primer producto
+          </button>
+        </div>
+
+        <div id="estado-cargando" style="text-align:center; padding:40px 0; color:var(--texto-2);">
+          <div class="spinner" style="margin:0 auto 12px;"></div>
+          Cargando productos...
+        </div>
+
+        <div class="tabla-contenedor" id="tabla-wrap" style="display:none; border:none; border-radius:0;">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio venta</th>
+                <th>Costo</th>
+                <th style="white-space:nowrap;">Stock actual</th>
+                <th style="white-space:nowrap;">Stock mínimo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-inventario"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <nav class="nav-movil" role="navigation" aria-label="Navegación móvil">
+    <ul class="nav-movil-lista">
+      <li><a href="index.html"      class="nav-movil-item"><i data-lucide="layout-dashboard"></i>Inicio</a></li>
+      <li><a href="inventario.html" class="nav-movil-item activo"><i data-lucide="package"></i>Inventario</a></li>
+      <li><a href="pedidos.html"    class="nav-movil-item"><i data-lucide="shopping-bag"></i>Pedidos</a></li>
+      <li><a href="clientes.html"   class="nav-movil-item"><i data-lucide="users"></i>Clientes</a></li>
+      <li><a href="finanzas.html"   class="nav-movil-item"><i data-lucide="bar-chart-2"></i>Finanzas</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+
+<!-- MODAL: AGREGAR / EDITAR PRODUCTO -->
+<div class="modal-overlay" id="modal-producto" role="dialog" aria-modal="true" aria-labelledby="modal-producto-titulo">
+  <div class="modal" style="max-width:540px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-producto-titulo">Agregar producto</h3>
+      <button onclick="cerrarModalProducto()" class="btn btn-icono btn-fantasma" aria-label="Cerrar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <form id="form-producto" onsubmit="return false" novalidate>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-nombre">Nombre del producto</label>
+        <input type="text" id="campo-nombre" class="campo-input" placeholder="Ej. Corona de crisantemos blancos" maxlength="120" />
+      </div>
+
+      <div class="campo">
+        <label class="campo-label" for="campo-descripcion">Descripción</label>
+        <textarea id="campo-descripcion" class="campo-textarea" placeholder="Descripción breve del producto..." rows="2" maxlength="300"></textarea>
+      </div>
+
+      <div class="campo-fila">
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-precio">Precio de venta ($)</label>
+          <input type="number" id="campo-precio" class="campo-input" placeholder="0" min="0" step="1" />
+        </div>
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-costo">Costo ($)</label>
+          <input type="number" id="campo-costo" class="campo-input" placeholder="0" min="0" step="1" />
+        </div>
+      </div>
+
+      <div class="campo-fila">
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-stock">Stock actual</label>
+          <input type="number" id="campo-stock" class="campo-input" placeholder="0" min="0" step="1" />
+          <span class="campo-ayuda">Piezas disponibles ahora</span>
+        </div>
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-stock-min">Stock mínimo</label>
+          <input type="number" id="campo-stock-min" class="campo-input" placeholder="0" min="0" step="1" />
+          <span class="campo-ayuda">Alerta cuando baje de este número</span>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalProducto()" class="btn btn-secundario">Cancelar</button>
+      <button id="btn-guardar-producto" onclick="guardarProducto()" class="btn btn-primario">
+        <i data-lucide="check" class="icono"></i>
+        Guardar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL: CONFIRMAR ELIMINACIÓN -->
+<div class="modal-overlay" id="modal-eliminar" role="alertdialog" aria-modal="true" aria-labelledby="modal-eliminar-titulo">
+  <div class="modal" style="max-width:400px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-eliminar-titulo">Eliminar producto</h3>
+    </div>
+
+    <p style="margin-bottom:8px;">
+      ¿Estás segura de que quieres eliminar
+      <strong id="nombre-a-eliminar"></strong>?
+    </p>
+    <p style="font-size:13px; color:var(--texto-2);">Esta acción no se puede deshacer.</p>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalEliminar()" class="btn btn-secundario">Cancelar</button>
+      <button onclick="confirmarEliminar()" class="btn btn-peligro">
+        <i data-lucide="trash-2" class="icono"></i>
+        Eliminar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="toast-contenedor" id="toast-contenedor" aria-live="polite"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+  /* =====================================================
+     ESTADO
+     ===================================================== */
+  let productos          = [];
+  let productoEditandoId = null;
+  let productoElimId     = null;
+
+
+  /* =====================================================
+     FORMATO
+     ===================================================== */
+  function formatearPeso(monto) {
+    return new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN', minimumFractionDigits:0 }).format(monto ?? 0);
+  }
+
+  function escaparHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+
+  /* =====================================================
+     CARGA DESDE SUPABASE
+     ===================================================== */
+  async function cargarProductos() {
+    document.getElementById('estado-cargando').style.display = '';
+    document.getElementById('tabla-wrap').style.display      = 'none';
+    document.getElementById('estado-vacio-inventario').style.display = 'none';
+
+    const { data, error } = await supabaseClient
+      .from('productos')
+      .select('*')
+      .order('nombre');
+
+    document.getElementById('estado-cargando').style.display = 'none';
+
+    if (error) {
+      mostrarToast('Error al cargar productos: ' + error.message, 'aviso');
+      return;
+    }
+    productos = data || [];
+    renderTabla();
+  }
+
+
+  /* =====================================================
+     RENDER
+     ===================================================== */
+  function renderTabla() {
+    const tbody        = document.getElementById('tbody-inventario');
+    const estadoVacio  = document.getElementById('estado-vacio-inventario');
+    const tablaWrap    = document.getElementById('tabla-wrap');
+    const conteo       = document.getElementById('conteo-productos');
+    const bannerStock  = document.getElementById('banner-stock-bajo');
+    const badgeSidebar = document.getElementById('badge-stock-bajo');
+
+    const productosBajos = productos.filter(p => p.stock_actual < p.stock_minimo);
+
+    if (productosBajos.length > 0) {
+      const n = productosBajos.length;
+      document.getElementById('banner-stock-texto').textContent =
+        `${n} producto${n > 1 ? 's' : ''} con stock bajo. Revisa tu inventario antes de recibir pedidos.`;
+      bannerStock.style.display  = '';
+      badgeSidebar.textContent   = n;
+      badgeSidebar.style.display = '';
+    } else {
+      bannerStock.style.display  = 'none';
+      badgeSidebar.style.display = 'none';
+    }
+
+    if (productos.length === 0) {
+      estadoVacio.style.display = '';
+      tablaWrap.style.display   = 'none';
+      conteo.style.display      = 'none';
+      return;
+    }
+
+    estadoVacio.style.display = 'none';
+    tablaWrap.style.display   = '';
+    conteo.textContent        = `${productos.length} producto${productos.length !== 1 ? 's' : ''}`;
+    conteo.style.display      = '';
+
+    tbody.innerHTML = productos.map(p => {
+      const bajo = p.stock_actual < p.stock_minimo;
+      return `
+        <tr>
+          <td>
+            <div class="negrita" style="margin-bottom:2px;">${escaparHTML(p.nombre)}</div>
+            ${p.descripcion ? `<div class="texto-tenue truncar" style="max-width:260px;">${escaparHTML(p.descripcion)}</div>` : ''}
+          </td>
+          <td style="white-space:nowrap;">${formatearPeso(p.precio_venta)}</td>
+          <td style="white-space:nowrap;">${formatearPeso(p.costo)}</td>
+          <td>
+            <div class="flex items-center gap-2">
+              <span style="font-weight:${bajo ? '600' : '400'}; color:${bajo ? 'var(--alerta-txt)' : 'inherit'};">${p.stock_actual}</span>
+              ${bajo ? '<span class="badge badge-alerta">Stock bajo</span>' : ''}
+            </div>
+          </td>
+          <td>${p.stock_minimo}</td>
+          <td>
+            <div class="tabla-acciones">
+              <button onclick="abrirModalProducto('${p.id}')" class="btn btn-icono btn-fantasma" title="Editar" aria-label="Editar ${escaparHTML(p.nombre)}">
+                <i data-lucide="pencil" style="width:15px;height:15px;"></i>
+              </button>
+              <button onclick="pedirConfirmacionEliminar('${p.id}')" class="btn btn-icono btn-peligro" title="Eliminar" aria-label="Eliminar ${escaparHTML(p.nombre)}">
+                <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    lucide.createIcons();
+  }
+
+
+  /* =====================================================
+     MODAL AGREGAR / EDITAR
+     ===================================================== */
+  function abrirModalProducto(id = null) {
+    limpiarErrores();
+    const titulo = document.getElementById('modal-producto-titulo');
+
+    if (id !== null) {
+      const p = productos.find(x => x.id === id);
+      if (!p) return;
+      productoEditandoId = id;
+      titulo.textContent = 'Editar producto';
+      document.getElementById('campo-nombre').value      = p.nombre;
+      document.getElementById('campo-descripcion').value = p.descripcion || '';
+      document.getElementById('campo-precio').value      = p.precio_venta;
+      document.getElementById('campo-costo').value       = p.costo;
+      document.getElementById('campo-stock').value       = p.stock_actual;
+      document.getElementById('campo-stock-min').value   = p.stock_minimo;
+    } else {
+      productoEditandoId = null;
+      titulo.textContent = 'Agregar producto';
+      document.getElementById('form-producto').reset();
+    }
+
+    document.getElementById('modal-producto').classList.add('abierto');
+    lucide.createIcons();
+    document.getElementById('campo-nombre').focus();
+  }
+
+  function cerrarModalProducto() {
+    document.getElementById('modal-producto').classList.remove('abierto');
+    productoEditandoId = null;
+    limpiarErrores();
+  }
+
+
+  /* =====================================================
+     VALIDACIÓN
+     ===================================================== */
+  function limpiarErrores() {
+    document.querySelectorAll('.campo-input.error, .campo-textarea.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.campo-error-msg').forEach(el => el.remove());
+  }
+
+  function marcarError(inputId, mensaje) {
+    const input = document.getElementById(inputId);
+    input.classList.add('error');
+    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('campo-error-msg')) {
+      const msg = document.createElement('div');
+      msg.className = 'texto-error campo-error-msg';
+      msg.textContent = mensaje;
+      input.insertAdjacentElement('afterend', msg);
+    }
+  }
+
+  function validarFormulario() {
+    limpiarErrores();
+    let valido = true;
+
+    const nombre = document.getElementById('campo-nombre').value.trim();
+    if (!nombre) { marcarError('campo-nombre', 'El nombre es obligatorio.'); valido = false; }
+
+    const precio = document.getElementById('campo-precio').value;
+    if (precio === '' || isNaN(Number(precio)) || Number(precio) < 0) {
+      marcarError('campo-precio', 'Ingresa un precio válido (mayor o igual a 0).'); valido = false;
+    }
+
+    const costo = document.getElementById('campo-costo').value;
+    if (costo === '' || isNaN(Number(costo)) || Number(costo) < 0) {
+      marcarError('campo-costo', 'Ingresa un costo válido (mayor o igual a 0).'); valido = false;
+    }
+
+    const stock = document.getElementById('campo-stock').value;
+    if (stock === '' || isNaN(Number(stock)) || Number(stock) < 0 || !Number.isInteger(Number(stock))) {
+      marcarError('campo-stock', 'Ingresa un número entero (0 o más).'); valido = false;
+    }
+
+    const stockMin = document.getElementById('campo-stock-min').value;
+    if (stockMin === '' || isNaN(Number(stockMin)) || Number(stockMin) < 0 || !Number.isInteger(Number(stockMin))) {
+      marcarError('campo-stock-min', 'Ingresa un número entero (0 o más).'); valido = false;
+    }
+
+    return valido;
+  }
+
+
+  /* =====================================================
+     GUARDAR PRODUCTO (Supabase)
+     ===================================================== */
+  async function guardarProducto() {
+    if (!validarFormulario()) return;
+
+    const datos = {
+      nombre:       document.getElementById('campo-nombre').value.trim(),
+      descripcion:  document.getElementById('campo-descripcion').value.trim(),
+      precio_venta: Number(document.getElementById('campo-precio').value),
+      costo:        Number(document.getElementById('campo-costo').value),
+      stock_actual: parseInt(document.getElementById('campo-stock').value, 10),
+      stock_minimo: parseInt(document.getElementById('campo-stock-min').value, 10),
+    };
+
+    const btn = document.getElementById('btn-guardar-producto');
+    btn.disabled = true;
+
+    let error;
+    if (productoEditandoId !== null) {
+      ({ error } = await supabaseClient.from('productos').update(datos).eq('id', productoEditandoId));
+      if (!error) mostrarToast('Producto actualizado correctamente.', 'exito');
+    } else {
+      ({ error } = await supabaseClient.from('productos').insert(datos));
+      if (!error) mostrarToast('Producto agregado al inventario.', 'exito');
+    }
+
+    btn.disabled = false;
+
+    if (error) { mostrarToast('Error: ' + error.message, 'aviso'); return; }
+
+    cerrarModalProducto();
+    await cargarProductos();
+  }
+
+
+  /* =====================================================
+     ELIMINAR PRODUCTO (Supabase)
+     ===================================================== */
+  function pedirConfirmacionEliminar(id) {
+    const p = productos.find(x => x.id === id);
+    if (!p) return;
+    productoElimId = id;
+    document.getElementById('nombre-a-eliminar').textContent = p.nombre;
+    document.getElementById('modal-eliminar').classList.add('abierto');
+    lucide.createIcons();
+  }
+
+  function cerrarModalEliminar() {
+    document.getElementById('modal-eliminar').classList.remove('abierto');
+    productoElimId = null;
+  }
+
+  async function confirmarEliminar() {
+    if (productoElimId === null) return;
+    const nombre = productos.find(p => p.id === productoElimId)?.nombre || 'Producto';
+
+    const { error } = await supabaseClient.from('productos').delete().eq('id', productoElimId);
+    if (error) { mostrarToast('Error al eliminar: ' + error.message, 'aviso'); return; }
+
+    cerrarModalEliminar();
+    mostrarToast(`"${nombre}" eliminado del inventario.`, 'aviso');
+    await cargarProductos();
+  }
+
+
+  /* =====================================================
+     TOASTS
+     ===================================================== */
+  function mostrarToast(mensaje, tipo = '') {
+    const contenedor = document.getElementById('toast-contenedor');
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = mensaje;
+    contenedor.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('salir');
+      toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    }, 3000);
+  }
+
+
+  /* =====================================================
+     ANIMACIONES
+     ===================================================== */
+  function iniciarAnimaciones() {
+    const observer = new IntersectionObserver(
+      (entradas) => entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.animar-entrada').forEach(el => observer.observe(el));
+  }
+
+
+  /* =====================================================
+     EVENTOS
+     ===================================================== */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { cerrarModalProducto(); cerrarModalEliminar(); }
+  });
+
+  document.getElementById('modal-producto').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) cerrarModalProducto();
+  });
+  document.getElementById('modal-eliminar').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) cerrarModalEliminar();
+  });
+
+  document.getElementById('form-producto').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); guardarProducto(); }
+  });
+
+
+  /* =====================================================
+     INICIALIZACIÓN
+     ===================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    iniciarAnimaciones();
+    cargarProductos();
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('nuevo') === '1') abrirModalProducto();
+  });
+
+</script>
+</body>
+</html>

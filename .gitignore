@@ -1,0 +1,34 @@
+# ============================================
+# NOVEDADES NOELY — .gitignore
+# ============================================
+
+# Variables de entorno y credenciales (¡nunca subir a git!)
+.env
+.env.local
+.env.*.local
+js/env.js
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencias
+node_modules/
+
+# Claude Code (configuración local del agente)
+.claude/settings.local.json
+
+# Build / Vercel
+.vercel/
+dist/
+build/

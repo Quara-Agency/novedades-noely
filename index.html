@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novedades Noely — Panel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Menú principal">
+
+    <div class="sidebar-logo">
+      <svg class="sidebar-logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="4" fill="#F472B6"/>
+        <ellipse cx="16" cy="8"  rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="16" cy="24" rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="8"  cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="24" cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="10.3" cy="10.3" rx="3" ry="5" transform="rotate(-45 10.3 10.3)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="21.7" rx="3" ry="5" transform="rotate(-45 21.7 21.7)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="10.3" rx="3" ry="5" transform="rotate(45 21.7 10.3)"  fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="10.3" cy="21.7" rx="3" ry="5" transform="rotate(45 10.3 21.7)"  fill="#DB2777" opacity="0.45"/>
+      </svg>
+      <div>
+        <div class="sidebar-logo-texto">Novedades Noely</div>
+        <div class="sidebar-logo-subtitulo">Panel de administración</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item activo" id="nav-inicio">
+        <i data-lucide="layout-dashboard" class="nav-icono"></i>
+        Inicio
+      </a>
+      <div class="sidebar-seccion-titulo">Negocio</div>
+      <a href="inventario.html" class="nav-item" id="nav-inventario">
+        <i data-lucide="package" class="nav-icono"></i>
+        Inventario
+        <span class="nav-badge" id="badge-inventario" style="display:none"></span>
+      </a>
+      <a href="pedidos.html" class="nav-item" id="nav-pedidos">
+        <i data-lucide="shopping-bag" class="nav-icono"></i>
+        Pedidos
+        <span class="nav-badge" id="badge-pedidos" style="display:none"></span>
+      </a>
+      <a href="clientes.html" class="nav-item" id="nav-clientes">
+        <i data-lucide="users" class="nav-icono"></i>
+        Clientes
+      </a>
+      <div class="sidebar-seccion-titulo">Dinero</div>
+      <a href="finanzas.html" class="nav-item" id="nav-finanzas">
+        <i data-lucide="bar-chart-2" class="nav-icono"></i>
+        Finanzas
+      </a>
+    </nav>
+
+    <div class="sidebar-flor" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="8" fill="currentColor"/>
+        <ellipse cx="40" cy="18" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="40" cy="62" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="18" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="62" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="23" cy="23" rx="7" ry="13" transform="rotate(-45 23 23)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="57" rx="7" ry="13" transform="rotate(-45 57 57)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="23" rx="7" ry="13" transform="rotate(45 57 23)"  fill="currentColor" opacity="0.6"/>
+        <ellipse cx="23" cy="57" rx="7" ry="13" transform="rotate(45 23 57)"  fill="currentColor" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="nav-item w-full" onclick="cerrarSesion()">
+        <i data-lucide="log-out" class="nav-icono"></i>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </aside>
+
+
+  <main class="contenido-principal">
+
+    <header class="pagina-header">
+      <div class="pagina-header-texto">
+        <h1 id="saludo-titulo">Bienvenida, Noely</h1>
+        <p id="fecha-hoy">Cargando fecha...</p>
+      </div>
+      <div class="flex gap-3 items-center">
+        <a href="pedidos.html" class="btn btn-primario" onclick="abrirNuevoPedido(event)">
+          <i data-lucide="plus" class="icono"></i>
+          Nuevo pedido
+        </a>
+      </div>
+    </header>
+
+    <div class="pagina-cuerpo">
+
+      <!-- KPIs -->
+      <div class="kpi-grid" id="kpi-grid">
+
+        <div class="kpi-tarjeta animar-entrada">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Pedidos pendientes</span>
+            <div class="kpi-icono-cont">
+              <i data-lucide="clock"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-pendientes">—</div>
+          <div class="kpi-sub">Por entregar</div>
+        </div>
+
+        <div class="kpi-tarjeta animar-entrada">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Ingresos del mes</span>
+            <div class="kpi-icono-cont dorado">
+              <i data-lucide="banknote"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-ingresos">—</div>
+          <div class="kpi-sub" id="kpi-ingresos-sub">Este mes</div>
+        </div>
+
+        <div class="kpi-tarjeta animar-entrada">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Bajo stock</span>
+            <div class="kpi-icono-cont">
+              <i data-lucide="alert-triangle"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-stock">—</div>
+          <div class="kpi-sub">Productos por surtir</div>
+        </div>
+
+        <div class="kpi-tarjeta animar-entrada">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Clientes</span>
+            <div class="kpi-icono-cont">
+              <i data-lucide="heart"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-clientes">—</div>
+          <div class="kpi-sub">Registrados</div>
+        </div>
+
+      </div>
+
+
+      <!-- BENTO: Pedidos recientes + Alertas de stock -->
+      <div class="bento-3">
+
+        <!-- Pedidos recientes -->
+        <div class="tarjeta animar-entrada seccion">
+          <div class="tarjeta-cabecera">
+            <span class="tarjeta-titulo">Pedidos recientes</span>
+            <a href="pedidos.html" class="btn btn-fantasma btn-sm">
+              Ver todos
+              <i data-lucide="arrow-right" class="icono"></i>
+            </a>
+          </div>
+
+          <div class="tabla-contenedor" style="border:none; border-radius:0;">
+            <table class="tabla" id="tabla-pedidos-recientes">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-pedidos">
+                <tr>
+                  <td colspan="4">
+                    <div class="cargando-overlay">
+                      <div class="spinner"></div>
+                      Cargando...
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="bento-col">
+
+          <!-- Alertas de stock -->
+          <div class="tarjeta animar-entrada">
+            <div class="tarjeta-cabecera">
+              <span class="tarjeta-titulo">Por surtir</span>
+              <a href="inventario.html" class="btn btn-fantasma btn-sm">Ver todo</a>
+            </div>
+            <div id="lista-alertas-stock">
+              <div class="cargando-overlay"><div class="spinner"></div></div>
+            </div>
+          </div>
+
+          <!-- Acciones rápidas -->
+          <div class="tarjeta animar-entrada">
+            <div class="tarjeta-cabecera">
+              <span class="tarjeta-titulo">Acciones rápidas</span>
+            </div>
+            <div class="flex flex-col gap-2">
+              <a href="pedidos.html" class="btn btn-secundario w-full" onclick="abrirNuevoPedido(event)">
+                <i data-lucide="shopping-bag" class="icono"></i>
+                Crear pedido
+              </a>
+              <a href="clientes.html" class="btn btn-secundario w-full">
+                <i data-lucide="user-plus" class="icono"></i>
+                Agregar cliente
+              </a>
+              <a href="inventario.html?nuevo=1" class="btn btn-secundario w-full">
+                <i data-lucide="package-plus" class="icono"></i>
+                Agregar producto
+              </a>
+              <a href="finanzas.html" class="btn btn-secundario w-full">
+                <i data-lucide="receipt" class="icono"></i>
+                Registrar gasto
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <nav class="nav-movil" role="navigation" aria-label="Navegación móvil">
+    <ul class="nav-movil-lista">
+      <li><a href="index.html"      class="nav-movil-item activo"><i data-lucide="layout-dashboard"></i>Inicio</a></li>
+      <li><a href="inventario.html" class="nav-movil-item"><i data-lucide="package"></i>Inventario</a></li>
+      <li><a href="pedidos.html"    class="nav-movil-item"><i data-lucide="shopping-bag"></i>Pedidos</a></li>
+      <li><a href="clientes.html"   class="nav-movil-item"><i data-lucide="users"></i>Clientes</a></li>
+      <li><a href="finanzas.html"   class="nav-movil-item"><i data-lucide="bar-chart-2"></i>Finanzas</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+
+<div class="toast-contenedor" id="toast-contenedor" aria-live="polite"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+  /* =====================================================
+     PARSEAR NOTAS JSON (campos extra serializados en pedidos.notas)
+     ===================================================== */
+  function parseNotas(str) {
+    if (!str) return {};
+    try {
+      const d = JSON.parse(str);
+      if (d && typeof d === 'object') return d;
+    } catch {}
+    return { notas: str };
+  }
+
+
+  /* =====================================================
+     FORMATO
+     ===================================================== */
+  function formatearPeso(monto) {
+    return new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN', minimumFractionDigits:0 }).format(monto);
+  }
+
+  function fechaCorta(isoStr) {
+    if (!isoStr) return '—';
+    const [y, m, d] = isoStr.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('es-MX', { day:'numeric', month:'short' });
+  }
+
+  function escaparHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+  function badgeEstado(estado) {
+    const clases = { pendiente:'badge-pendiente', listo:'badge-listo', entregado:'badge-entregado' };
+    const textos = { pendiente:'Pendiente', listo:'Listo', entregado:'Entregado' };
+    return `<span class="badge ${clases[estado] || 'badge-rosa'}">${textos[estado] || estado}</span>`;
+  }
+
+
+  /* =====================================================
+     KPIs — 4 consultas paralelas a Supabase
+     ===================================================== */
+  async function cargarKPIs() {
+    const hoy = new Date();
+    const inicioMes = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-01`;
+
+    const [
+      { data: pedidosPendientes, error: e1 },
+      { data: ingresos,          error: e2 },
+      { data: productos,         error: e3 },
+      { data: clientes,          error: e4 },
+    ] = await Promise.all([
+      supabaseClient.from('pedidos').select('id').eq('estado', 'pendiente'),
+      supabaseClient.from('transacciones').select('monto').eq('tipo', 'ingreso').gte('fecha', inicioMes),
+      supabaseClient.from('productos').select('id, stock_actual, stock_minimo'),
+      supabaseClient.from('clientes').select('id'),
+    ]);
+
+    // Pedidos pendientes
+    const pendientes = (pedidosPendientes || []).length;
+    document.getElementById('kpi-pendientes').textContent = pendientes;
+
+    const badgePedidos = document.getElementById('badge-pedidos');
+    if (pendientes > 0) { badgePedidos.textContent = pendientes; badgePedidos.style.display = ''; }
+    else { badgePedidos.style.display = 'none'; }
+
+    // Ingresos del mes
+    const totalIngresos = (ingresos || []).reduce((a, t) => a + (t.monto || 0), 0);
+    document.getElementById('kpi-ingresos').textContent = formatearPeso(totalIngresos);
+
+    // Productos bajo stock
+    const bajoStock = (productos || []).filter(p => p.stock_actual < p.stock_minimo).length;
+    document.getElementById('kpi-stock').textContent = bajoStock;
+
+    const badgeInv = document.getElementById('badge-inventario');
+    if (bajoStock > 0) { badgeInv.textContent = bajoStock; badgeInv.style.display = ''; }
+    else { badgeInv.style.display = 'none'; }
+
+    // Total clientes
+    document.getElementById('kpi-clientes').textContent = (clientes || []).length;
+  }
+
+
+  /* =====================================================
+     PEDIDOS RECIENTES — últimos 6 desde Supabase
+     ===================================================== */
+  async function cargarPedidosRecientes() {
+    const tbody = document.getElementById('tbody-pedidos');
+
+    const { data, error } = await supabaseClient
+      .from('pedidos')
+      .select('id, total, estado, created_at, notas, clientes(nombre)')
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4">
+            <div class="estado-vacio" style="padding:32px 16px;">
+              <div class="estado-vacio-titulo" style="font-size:15px;">Sin pedidos aún</div>
+              <p style="font-size:13px;">Los pedidos aparecerán aquí cuando los registres.</p>
+              <a href="pedidos.html" class="btn btn-primario btn-sm" style="margin-top:12px;" onclick="abrirNuevoPedido(event)">
+                Crear primer pedido
+              </a>
+            </div>
+          </td>
+        </tr>
+      `;
+      lucide.createIcons();
+      return;
+    }
+
+    tbody.innerHTML = data.map(p => {
+      const meta     = parseNotas(p.notas);
+      const cliente  = p.clientes?.nombre || meta.cliente_nombre || 'Cliente general';
+      const fecha    = (p.created_at || '').substring(0, 10);
+      return `
+        <tr>
+          <td><span class="negrita">${escaparHTML(cliente)}</span></td>
+          <td style="white-space:nowrap;">${formatearPeso(p.total || 0)}</td>
+          <td>${badgeEstado(p.estado)}</td>
+          <td style="white-space:nowrap; color:var(--texto-2); font-size:var(--text-sm);">${fechaCorta(fecha)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    lucide.createIcons();
+  }
+
+
+  /* =====================================================
+     ALERTAS DE STOCK — productos bajo mínimo desde Supabase
+     ===================================================== */
+  async function cargarAlertasStock() {
+    const lista = document.getElementById('lista-alertas-stock');
+
+    const { data, error } = await supabaseClient
+      .from('productos')
+      .select('id, nombre, stock_actual, stock_minimo')
+      .order('nombre');
+
+    if (error) {
+      lista.innerHTML = `<p style="font-size:13px; color:var(--texto-2); padding:8px;">Error al cargar stock.</p>`;
+      return;
+    }
+
+    const bajos = (data || []).filter(p => p.stock_actual < p.stock_minimo);
+
+    if (bajos.length === 0) {
+      lista.innerHTML = `
+        <div class="estado-vacio" style="padding:24px 8px;">
+          <p style="font-size:13px; text-align:center; color:var(--texto-2);">
+            Todo el stock está al nivel correcto.
+          </p>
+        </div>
+      `;
+      return;
+    }
+
+    lista.innerHTML = bajos.map(p => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--borde);">
+        <div>
+          <div style="font-weight:600;font-size:13px;">${escaparHTML(p.nombre)}</div>
+          <div style="font-size:12px;color:var(--texto-2);">Stock: ${p.stock_actual} / mínimo: ${p.stock_minimo}</div>
+        </div>
+        <span class="badge badge-alerta">Stock bajo</span>
+      </div>
+    `).join('');
+  }
+
+
+  /* =====================================================
+     SALUDO Y FECHA
+     ===================================================== */
+  function actualizarSaludo() {
+    const hora  = new Date().getHours();
+    let saludo  = 'Bienvenida';
+    if (hora >= 5  && hora < 12) saludo = 'Buenos días';
+    if (hora >= 12 && hora < 19) saludo = 'Buenas tardes';
+    if (hora >= 19 || hora < 5)  saludo = 'Buenas noches';
+    document.getElementById('saludo-titulo').textContent = `${saludo}, Noely`;
+  }
+
+  function mostrarFecha() {
+    const hoy     = new Date();
+    const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    const texto   = hoy.toLocaleDateString('es-MX', opciones);
+    document.getElementById('fecha-hoy').textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
+  }
+
+
+  /* =====================================================
+     ANIMACIONES
+     ===================================================== */
+  function iniciarAnimaciones() {
+    const observer = new IntersectionObserver(
+      (entradas) => entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.animar-entrada').forEach(el => observer.observe(el));
+  }
+
+
+  /* =====================================================
+     NAVEGAR A PEDIDOS CON MODAL ABIERTO
+     ===================================================== */
+  function abrirNuevoPedido(e) {
+    e.preventDefault();
+    window.location.href = 'pedidos.html?nuevo=1';
+  }
+
+
+  /* =====================================================
+     TOASTS
+     ===================================================== */
+  function mostrarToast(mensaje, tipo = '') {
+    const contenedor = document.getElementById('toast-contenedor');
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = mensaje;
+    contenedor.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('salir');
+      toast.addEventListener('animationend', () => toast.remove());
+    }, 3200);
+  }
+
+
+  /* =====================================================
+     INICIALIZACIÓN — carga todo en paralelo desde Supabase
+     ===================================================== */
+  document.addEventListener('DOMContentLoaded', async () => {
+    lucide.createIcons();
+    actualizarSaludo();
+    mostrarFecha();
+    iniciarAnimaciones();
+
+    await Promise.all([
+      cargarKPIs(),
+      cargarPedidosRecientes(),
+      cargarAlertasStock(),
+    ]);
+
+    lucide.createIcons();
+  });
+
+</script>
+
+</body>
+</html>

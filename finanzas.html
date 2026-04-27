@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novedades Noely — Finanzas</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Estilos de pestañas — exclusivos de esta página */
+    .tabs-nav {
+      display: flex;
+      border-bottom: 1px solid var(--borde);
+      margin-bottom: var(--s-6);
+      gap: 0;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--texto-2);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
+      margin-bottom: -1px;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--texto); background: var(--lienzo); }
+    .tab-btn.activo { color: var(--rosa-oscuro); border-bottom-color: var(--rosa); font-weight: 600; }
+    .tab-panel { display: none; }
+    .tab-panel.activo { display: block; }
+
+    /* Tarjeta resumen Por cobrar */
+    .cobrar-resumen {
+      display: flex;
+      align-items: center;
+      gap: var(--s-4);
+      padding: var(--s-4) var(--s-5);
+      background: var(--pendiente-bg);
+      border: 1px solid #FDE68A;
+      border-radius: var(--radio-md);
+      margin-bottom: var(--s-5);
+    }
+    .cobrar-resumen-monto {
+      font-family: var(--fuente-titulo);
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: var(--pendiente-txt);
+    }
+    .cobrar-resumen-label {
+      font-size: var(--text-sm);
+      color: var(--pendiente-txt);
+      font-weight: 500;
+    }
+
+    /* Total gastos fijos */
+    .total-fijos {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--s-4) var(--s-5);
+      background: var(--lienzo);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-md);
+      margin-top: var(--s-5);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar" role="navigation" aria-label="Menú principal">
+    <div class="sidebar-logo">
+      <svg class="sidebar-logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="4" fill="#F472B6"/>
+        <ellipse cx="16" cy="8"  rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="16" cy="24" rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="8"  cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="24" cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="10.3" cy="10.3" rx="3" ry="5" transform="rotate(-45 10.3 10.3)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="21.7" rx="3" ry="5" transform="rotate(-45 21.7 21.7)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="10.3" rx="3" ry="5" transform="rotate(45 21.7 10.3)"  fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="10.3" cy="21.7" rx="3" ry="5" transform="rotate(45 10.3 21.7)"  fill="#DB2777" opacity="0.45"/>
+      </svg>
+      <div>
+        <div class="sidebar-logo-texto">Novedades Noely</div>
+        <div class="sidebar-logo-subtitulo">Panel de administración</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <i data-lucide="layout-dashboard" class="nav-icono"></i>
+        Inicio
+      </a>
+      <div class="sidebar-seccion-titulo">Negocio</div>
+      <a href="inventario.html" class="nav-item">
+        <i data-lucide="package" class="nav-icono"></i>
+        Inventario
+      </a>
+      <a href="pedidos.html" class="nav-item">
+        <i data-lucide="shopping-bag" class="nav-icono"></i>
+        Pedidos
+      </a>
+      <a href="clientes.html" class="nav-item">
+        <i data-lucide="users" class="nav-icono"></i>
+        Clientes
+      </a>
+      <div class="sidebar-seccion-titulo">Dinero</div>
+      <a href="finanzas.html" class="nav-item activo">
+        <i data-lucide="bar-chart-2" class="nav-icono"></i>
+        Finanzas
+      </a>
+    </nav>
+
+    <div class="sidebar-flor" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="8" fill="currentColor"/>
+        <ellipse cx="40" cy="18" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="40" cy="62" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="18" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="62" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="23" cy="23" rx="7" ry="13" transform="rotate(-45 23 23)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="57" rx="7" ry="13" transform="rotate(-45 57 57)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="23" rx="7" ry="13" transform="rotate(45 57 23)"  fill="currentColor" opacity="0.6"/>
+        <ellipse cx="23" cy="57" rx="7" ry="13" transform="rotate(45 23 57)"  fill="currentColor" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="nav-item w-full" onclick="cerrarSesion()">
+        <i data-lucide="log-out" class="nav-icono"></i>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="contenido-principal">
+
+    <header class="pagina-header">
+      <div class="pagina-header-texto">
+        <h1>Finanzas</h1>
+        <p>Ingresos, egresos y balance</p>
+      </div>
+      <button id="btn-accion-principal" onclick="abrirModalGasto()" class="btn btn-primario">
+        <i data-lucide="plus" class="icono"></i>
+        Registrar gasto
+      </button>
+    </header>
+
+    <div class="pagina-cuerpo">
+
+      <!-- Filtros de período -->
+      <div class="flex gap-2 mb-6" id="filtros-periodo" style="flex-wrap:wrap;">
+        <button class="btn btn-fantasma btn-sm"  data-periodo="hoy"    onclick="setPeriodo('hoy')">Hoy</button>
+        <button class="btn btn-fantasma btn-sm"  data-periodo="semana" onclick="setPeriodo('semana')">Esta semana</button>
+        <button class="btn btn-secundario btn-sm" data-periodo="mes"   onclick="setPeriodo('mes')">Este mes</button>
+        <button class="btn btn-fantasma btn-sm"  data-periodo="anio"   onclick="setPeriodo('anio')">Este año</button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid animar-entrada" id="kpi-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:var(--s-8);">
+
+        <div class="kpi-tarjeta">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Ingresos del período</span>
+            <div class="kpi-icono-cont dorado">
+              <i data-lucide="trending-up"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-ingresos">—</div>
+          <div class="kpi-sub">De pedidos entregados</div>
+        </div>
+
+        <div class="kpi-tarjeta">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Egresos del período</span>
+            <div class="kpi-icono-cont">
+              <i data-lucide="trending-down"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-egresos">—</div>
+          <div class="kpi-sub" id="kpi-egresos-sub">Gastos registrados</div>
+        </div>
+
+        <div class="kpi-tarjeta">
+          <div class="kpi-encabezado">
+            <span class="kpi-etiqueta">Balance del período</span>
+            <div class="kpi-icono-cont">
+              <i data-lucide="wallet"></i>
+            </div>
+          </div>
+          <div class="kpi-valor" id="kpi-balance">—</div>
+          <div class="kpi-sub">Ingresos menos gastos</div>
+        </div>
+
+      </div>
+
+      <!-- Tarjeta principal con pestañas -->
+      <div class="tarjeta animar-entrada">
+
+        <!-- Navegación de pestañas -->
+        <div class="tabs-nav">
+          <button class="tab-btn activo" data-tab="movimientos" onclick="setTab('movimientos')">
+            Movimientos
+          </button>
+          <button class="tab-btn" data-tab="por-cobrar" onclick="setTab('por-cobrar')">
+            Por cobrar
+          </button>
+          <button class="tab-btn" data-tab="gastos-fijos" onclick="setTab('gastos-fijos')">
+            Gastos fijos
+          </button>
+        </div>
+
+
+        <!-- ==========================================
+             PESTAÑA: MOVIMIENTOS
+             ========================================== -->
+        <div class="tab-panel activo" id="panel-movimientos">
+
+          <div class="flex gap-2 mb-5" id="filtros-tipo" style="flex-wrap:wrap;">
+            <button class="btn btn-secundario btn-sm" data-tipo="todos"   onclick="setTipo('todos')">Todos</button>
+            <button class="btn btn-fantasma  btn-sm" data-tipo="ingreso" onclick="setTipo('ingreso')">Ingresos</button>
+            <button class="btn btn-fantasma  btn-sm" data-tipo="egreso"  onclick="setTipo('egreso')">Egresos</button>
+          </div>
+
+          <div class="estado-cargando" id="estado-cargando-movimientos" style="display:none;">
+            <div class="cargando-overlay"><div class="spinner"></div> Cargando movimientos...</div>
+          </div>
+
+          <div class="estado-vacio" id="estado-vacio-movimientos" style="display:none;">
+            <i data-lucide="bar-chart-2" class="estado-vacio-icono"></i>
+            <div class="estado-vacio-titulo">Sin movimientos</div>
+            <p>No hay ingresos ni egresos en el período seleccionado.</p>
+            <button onclick="abrirModalGasto()" class="btn btn-primario">
+              <i data-lucide="plus" class="icono"></i>
+              Registrar primer gasto
+            </button>
+          </div>
+
+          <div class="tabla-contenedor" id="tabla-movimientos-wrap" style="display:none; border:none; border-radius:0;">
+            <table class="tabla">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th style="text-align:right; white-space:nowrap;">Monto</th>
+                  <th style="white-space:nowrap;">Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-movimientos"></tbody>
+            </table>
+          </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PESTAÑA: POR COBRAR
+             ========================================== -->
+        <div class="tab-panel" id="panel-por-cobrar">
+
+          <div class="cobrar-resumen" id="cobrar-resumen" style="display:none;">
+            <div>
+              <div class="cobrar-resumen-monto" id="cobrar-total">$0</div>
+              <div class="cobrar-resumen-label">total por cobrar</div>
+            </div>
+            <div style="flex:1; font-size:var(--text-sm); color:var(--pendiente-txt);">
+              Pedidos con saldos sin liquidar. Registra los pagos para mantener el control de cobranza.
+            </div>
+          </div>
+
+          <div class="estado-cargando" id="estado-cargando-cobrar" style="display:none;">
+            <div class="cargando-overlay"><div class="spinner"></div> Cargando...</div>
+          </div>
+
+          <div class="estado-vacio" id="estado-vacio-cobrar" style="display:none;">
+            <i data-lucide="check-circle-2" class="estado-vacio-icono"></i>
+            <div class="estado-vacio-titulo">Sin saldos pendientes</div>
+            <p>No hay pedidos con pagos pendientes en este momento.</p>
+            <a href="pedidos.html" class="btn btn-secundario">Ver pedidos</a>
+          </div>
+
+          <div class="tabla-contenedor" id="tabla-cobrar-wrap" style="display:none; border:none; border-radius:0;">
+            <table class="tabla">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th style="text-align:right; white-space:nowrap;">Total pedido</th>
+                  <th style="text-align:right; white-space:nowrap;">Anticipo</th>
+                  <th style="text-align:right; white-space:nowrap;">Saldo pendiente</th>
+                  <th style="white-space:nowrap;">Fecha liquidación</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tbody-cobrar"></tbody>
+            </table>
+          </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             PESTAÑA: GASTOS FIJOS
+             ========================================== -->
+        <div class="tab-panel" id="panel-gastos-fijos">
+
+          <div style="display:flex; justify-content:flex-end; margin-bottom:var(--s-5);">
+            <button onclick="abrirModalGastoFijo()" class="btn btn-primario">
+              <i data-lucide="plus" class="icono"></i>
+              Agregar gasto fijo
+            </button>
+          </div>
+
+          <div class="estado-vacio" id="estado-vacio-fijos" style="display:none;">
+            <i data-lucide="repeat" class="estado-vacio-icono"></i>
+            <div class="estado-vacio-titulo">Sin gastos fijos</div>
+            <p>Agrega los gastos recurrentes del negocio: renta, transporte, materiales base, etc.</p>
+            <button onclick="abrirModalGastoFijo()" class="btn btn-primario">
+              <i data-lucide="plus" class="icono"></i>
+              Agregar primer gasto fijo
+            </button>
+          </div>
+
+          <div id="tabla-fijos-wrap" style="display:none;">
+            <div class="tabla-contenedor" style="border:none; border-radius:0;">
+              <table class="tabla">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th style="text-align:right; white-space:nowrap;">Monto mensual</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-fijos"></tbody>
+              </table>
+            </div>
+
+            <div class="total-fijos">
+              <div>
+                <div style="font-size:var(--text-sm); color:var(--texto-2); font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Total mensual de gastos fijos</div>
+                <div style="font-size:var(--text-xs); color:var(--texto-2); margin-top:2px;">Se suma automáticamente a los egresos del mes</div>
+              </div>
+              <div id="total-fijos-monto" style="font-family:var(--fuente-titulo); font-size:var(--text-2xl); font-weight:700; color:var(--alerta-txt);">$0</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="nav-movil" role="navigation" aria-label="Navegación móvil">
+    <ul class="nav-movil-lista">
+      <li><a href="index.html"      class="nav-movil-item"><i data-lucide="layout-dashboard"></i>Inicio</a></li>
+      <li><a href="inventario.html" class="nav-movil-item"><i data-lucide="package"></i>Inventario</a></li>
+      <li><a href="pedidos.html"    class="nav-movil-item"><i data-lucide="shopping-bag"></i>Pedidos</a></li>
+      <li><a href="clientes.html"   class="nav-movil-item"><i data-lucide="users"></i>Clientes</a></li>
+      <li><a href="finanzas.html"   class="nav-movil-item activo"><i data-lucide="bar-chart-2"></i>Finanzas</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+
+<!-- MODAL: REGISTRAR GASTO (transacción de egreso) -->
+<div class="modal-overlay" id="modal-gasto" role="dialog" aria-modal="true" aria-labelledby="modal-gasto-titulo">
+  <div class="modal" style="max-width:460px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-gasto-titulo">Registrar gasto</h3>
+      <button onclick="cerrarModalGasto()" class="btn btn-icono btn-fantasma" aria-label="Cerrar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <form id="form-gasto" onsubmit="return false" novalidate>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-descripcion">Descripción</label>
+        <input type="text" id="campo-descripcion" class="campo-input" placeholder="Ej. Compra de crisantemos blancos" maxlength="200" />
+      </div>
+
+      <div class="campo-fila">
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-monto">Monto ($)</label>
+          <input type="number" id="campo-monto" class="campo-input" placeholder="0" min="1" step="1" />
+        </div>
+        <div class="campo">
+          <label class="campo-label requerido" for="campo-fecha">Fecha</label>
+          <input type="date" id="campo-fecha" class="campo-input" />
+        </div>
+      </div>
+
+    </form>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalGasto()" class="btn btn-secundario">Cancelar</button>
+      <button id="btn-guardar-gasto" onclick="guardarGasto()" class="btn btn-primario">
+        <i data-lucide="check" class="icono"></i>
+        Guardar gasto
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL: AGREGAR / EDITAR GASTO FIJO -->
+<div class="modal-overlay" id="modal-gasto-fijo" role="dialog" aria-modal="true" aria-labelledby="modal-fijo-titulo">
+  <div class="modal" style="max-width:460px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-fijo-titulo">Agregar gasto fijo</h3>
+      <button onclick="cerrarModalGastoFijo()" class="btn btn-icono btn-fantasma" aria-label="Cerrar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <form id="form-gasto-fijo" onsubmit="return false" novalidate>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-fijo-nombre">Nombre</label>
+        <input type="text" id="campo-fijo-nombre" class="campo-input" placeholder="Ej. Renta del local" maxlength="100" />
+      </div>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-fijo-monto">Monto mensual ($)</label>
+        <input type="number" id="campo-fijo-monto" class="campo-input" placeholder="0" min="1" step="1" />
+        <span class="campo-ayuda">Cuánto cuesta este gasto al mes</span>
+      </div>
+
+      <div class="campo">
+        <label class="campo-label" for="campo-fijo-desc">Descripción</label>
+        <textarea id="campo-fijo-desc" class="campo-textarea" placeholder="Detalles adicionales..." rows="2" maxlength="200"></textarea>
+      </div>
+
+    </form>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalGastoFijo()" class="btn btn-secundario">Cancelar</button>
+      <button onclick="guardarGastoFijo()" class="btn btn-primario">
+        <i data-lucide="check" class="icono"></i>
+        Guardar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL: REGISTRAR PAGO (Por cobrar) -->
+<div class="modal-overlay" id="modal-registrar-pago" role="dialog" aria-modal="true" aria-labelledby="modal-pago-titulo">
+  <div class="modal" style="max-width:440px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-pago-titulo">Registrar pago</h3>
+      <button onclick="cerrarModalPago()" class="btn btn-icono btn-fantasma" aria-label="Cerrar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <div id="info-pago" style="background:var(--lienzo); border:1px solid var(--borde); border-radius:var(--radio-md); padding:var(--s-4); margin-bottom:var(--s-4);">
+      <div style="display:flex; justify-content:space-between; margin-bottom:var(--s-2);">
+        <span style="font-size:var(--text-sm); color:var(--texto-2);">Cliente</span>
+        <span class="negrita" id="info-pago-cliente"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:var(--s-2);">
+        <span style="font-size:var(--text-sm); color:var(--texto-2);">Total del pedido</span>
+        <span id="info-pago-total"></span>
+      </div>
+      <div style="display:flex; justify-content:space-between;">
+        <span style="font-size:var(--text-sm); color:var(--texto-2);">Saldo pendiente</span>
+        <span class="negrita" style="color:var(--pendiente-txt);" id="info-pago-saldo"></span>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="campo-label requerido" for="campo-pago-monto">Monto a registrar ($)</label>
+      <input type="number" id="campo-pago-monto" class="campo-input" placeholder="0" min="1" step="1" />
+      <span class="campo-ayuda" id="campo-pago-ayuda"></span>
+    </div>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalPago()" class="btn btn-secundario">Cancelar</button>
+      <button id="btn-confirmar-pago" onclick="guardarPago()" class="btn btn-primario">
+        <i data-lucide="check" class="icono"></i>
+        Confirmar pago
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL: CONFIRMAR ELIMINACIÓN GASTO FIJO -->
+<div class="modal-overlay" id="modal-eliminar-fijo" role="alertdialog" aria-modal="true">
+  <div class="modal" style="max-width:400px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo">Eliminar gasto fijo</h3>
+    </div>
+
+    <p style="margin-bottom:8px;">
+      ¿Eliminar <strong id="nombre-fijo-eliminar"></strong> de los gastos fijos?
+    </p>
+    <p style="font-size:13px; color:var(--texto-2);">Esta acción no se puede deshacer.</p>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalEliminarFijo()" class="btn btn-secundario">Cancelar</button>
+      <button onclick="confirmarEliminarFijo()" class="btn btn-peligro">
+        <i data-lucide="trash-2" class="icono"></i>
+        Eliminar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="toast-contenedor" id="toast-contenedor" aria-live="polite"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+  /* =====================================================
+     localStorage HELPERS (solo para gastos fijos)
+     ===================================================== */
+  function lsGet(key) {
+    try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
+  }
+  function lsSet(key, data) {
+    try { localStorage.setItem(key, JSON.stringify(data)); } catch {}
+  }
+
+  /* =====================================================
+     PARSEAR NOTAS JSON (serialización de pedidos)
+     ===================================================== */
+  function parseNotas(str) {
+    if (!str) return {};
+    try {
+      const d = JSON.parse(str);
+      if (d && typeof d === 'object') return d;
+    } catch {}
+    return { notas: str };
+  }
+
+
+  /* =====================================================
+     DATOS
+     ===================================================== */
+  // transacciones cargadas desde Supabase
+  let transacciones = [];
+
+  // gastos fijos se mantienen en localStorage
+  let gastosFijos = (() => {
+    const saved = lsGet('nn_gastos_fijos');
+    return saved !== null ? saved : [];
+  })();
+  let nextFijoId = gastosFijos.length > 0 ? Math.max(...gastosFijos.map(g => g.id)) + 1 : 1;
+
+  let periodoActual  = 'mes';
+  let tipoActual     = 'todos';
+  let tabActual      = 'movimientos';
+  let fijoEditandoId = null;
+  let fijoElimId     = null;
+
+
+  /* =====================================================
+     FORMATO
+     ===================================================== */
+  function formatearPeso(monto) {
+    return new Intl.NumberFormat('es-MX', { style:'currency', currency:'MXN', minimumFractionDigits:0 }).format(monto);
+  }
+
+  function fechaCorta(isoStr) {
+    if (!isoStr) return '—';
+    const [y, m, d] = isoStr.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('es-MX', { day:'numeric', month:'short', year:'numeric' });
+  }
+
+  function escaparHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+
+  /* =====================================================
+     FILTRO DE PERÍODO
+     ===================================================== */
+  function obtenerInicioRango(periodo) {
+    const hoy    = new Date();
+    const inicio = new Date(hoy);
+    if (periodo === 'hoy') {
+      inicio.setHours(0, 0, 0, 0);
+    } else if (periodo === 'semana') {
+      inicio.setDate(hoy.getDate() - hoy.getDay());
+      inicio.setHours(0, 0, 0, 0);
+    } else if (periodo === 'mes') {
+      inicio.setDate(1);
+      inicio.setHours(0, 0, 0, 0);
+    } else if (periodo === 'anio') {
+      inicio.setMonth(0, 1);
+      inicio.setHours(0, 0, 0, 0);
+    }
+    return inicio;
+  }
+
+  function enRango(fechaIso, periodo) {
+    if (!fechaIso) return false;
+    const [y, m, d] = fechaIso.split('-').map(Number);
+    return new Date(y, m - 1, d) >= obtenerInicioRango(periodo);
+  }
+
+  function setPeriodo(periodo) {
+    periodoActual = periodo;
+    document.querySelectorAll('#filtros-periodo button').forEach(btn => {
+      btn.className = btn.dataset.periodo === periodo ? 'btn btn-secundario btn-sm' : 'btn btn-fantasma btn-sm';
+    });
+    actualizarVista();
+  }
+
+  function setTipo(tipo) {
+    tipoActual = tipo;
+    document.querySelectorAll('#filtros-tipo button').forEach(btn => {
+      btn.className = btn.dataset.tipo === tipo ? 'btn btn-secundario btn-sm' : 'btn btn-fantasma btn-sm';
+    });
+    renderMovimientos();
+  }
+
+
+  /* =====================================================
+     PESTAÑAS
+     ===================================================== */
+  function setTab(tab) {
+    tabActual = tab;
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('activo', btn.dataset.tab === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+      panel.classList.toggle('activo', panel.id === `panel-${tab}`);
+    });
+
+    const btnPrincipal = document.getElementById('btn-accion-principal');
+    if (tab === 'gastos-fijos') {
+      btnPrincipal.style.display = '';
+      btnPrincipal.innerHTML = '<i data-lucide="plus" class="icono"></i> Agregar gasto fijo';
+      btnPrincipal.onclick = abrirModalGastoFijo;
+    } else if (tab === 'por-cobrar') {
+      btnPrincipal.style.display = 'none';
+    } else {
+      btnPrincipal.style.display = '';
+      btnPrincipal.innerHTML = '<i data-lucide="plus" class="icono"></i> Registrar gasto';
+      btnPrincipal.onclick = abrirModalGasto;
+    }
+    lucide.createIcons();
+
+    if (tab === 'por-cobrar')   renderPorCobrar();
+    if (tab === 'gastos-fijos') renderGastosFijos();
+  }
+
+
+  /* =====================================================
+     CARGAR TRANSACCIONES DESDE SUPABASE
+     ===================================================== */
+  async function cargarTransacciones() {
+    const { data, error } = await supabaseClient
+      .from('transacciones')
+      .select('*')
+      .order('fecha', { ascending: false });
+
+    if (error) {
+      console.error('[Finanzas] Error al cargar transacciones:', error.message);
+      mostrarToast('Error al cargar movimientos.', 'error');
+      return;
+    }
+
+    transacciones = data || [];
+    actualizarVista();
+  }
+
+
+  /* =====================================================
+     KPIs — ingresos, egresos (+ gastos fijos en mes/anio), balance
+     ===================================================== */
+  function calcularKPIs() {
+    const listaPeriodo = transacciones.filter(t => enRango(t.fecha, periodoActual));
+
+    const ingresos = listaPeriodo.filter(t => t.tipo === 'ingreso').reduce((a, t) => a + (t.monto || 0), 0);
+    let   egresos  = listaPeriodo.filter(t => t.tipo === 'egreso' ).reduce((a, t) => a + (t.monto || 0), 0);
+
+    const totalFijos = gastosFijos.reduce((a, g) => a + g.monto_mensual, 0);
+    let   notaEgresos = 'Gastos registrados';
+
+    if (periodoActual === 'mes' && totalFijos > 0) {
+      egresos += totalFijos;
+      notaEgresos = `Incluye ${formatearPeso(totalFijos)} en gastos fijos`;
+    } else if (periodoActual === 'anio' && totalFijos > 0) {
+      egresos += totalFijos * 12;
+      notaEgresos = `Incluye ${formatearPeso(totalFijos * 12)} en gastos fijos`;
+    }
+
+    const balance = ingresos - egresos;
+
+    document.getElementById('kpi-ingresos').textContent = formatearPeso(ingresos);
+    document.getElementById('kpi-egresos').textContent  = formatearPeso(egresos);
+    document.getElementById('kpi-egresos-sub').textContent = notaEgresos;
+
+    const balanceEl = document.getElementById('kpi-balance');
+    balanceEl.textContent = formatearPeso(balance);
+    balanceEl.style.color = balance >= 0 ? 'var(--listo-txt)' : 'var(--alerta-txt)';
+  }
+
+
+  /* =====================================================
+     RENDER: MOVIMIENTOS
+     ===================================================== */
+  function renderMovimientos() {
+    const estadoVacio = document.getElementById('estado-vacio-movimientos');
+    const tablaWrap   = document.getElementById('tabla-movimientos-wrap');
+    const tbody       = document.getElementById('tbody-movimientos');
+
+    const listaPeriodo  = transacciones.filter(t => enRango(t.fecha, periodoActual));
+    const listaFiltrada = tipoActual === 'todos' ? listaPeriodo : listaPeriodo.filter(t => t.tipo === tipoActual);
+    const listaOrdenada = [...listaFiltrada].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''));
+
+    if (listaOrdenada.length === 0) {
+      estadoVacio.style.display = '';
+      tablaWrap.style.display   = 'none';
+      return;
+    }
+
+    estadoVacio.style.display = 'none';
+    tablaWrap.style.display   = '';
+
+    tbody.innerHTML = listaOrdenada.map(t => {
+      const badge = t.tipo === 'ingreso'
+        ? `<span class="badge badge-listo">Ingreso</span>`
+        : `<span class="badge badge-alerta">Egreso</span>`;
+      const color = t.tipo === 'ingreso' ? 'var(--listo-txt)' : 'var(--alerta-txt)';
+      const signo = t.tipo === 'ingreso' ? '+' : '−';
+      return `
+        <tr>
+          <td>${badge}</td>
+          <td>${escaparHTML(t.descripcion)}</td>
+          <td style="text-align:right; white-space:nowrap; font-weight:600; color:${color};">${signo} ${formatearPeso(t.monto)}</td>
+          <td style="white-space:nowrap; color:var(--texto-2); font-size:var(--text-sm);">${fechaCorta(t.fecha)}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+
+  /* =====================================================
+     RENDER: POR COBRAR — lee pedidos desde Supabase
+     ===================================================== */
+  function badgeEstadoMini(estado) {
+    const clases = { pendiente:'badge-pendiente', listo:'badge-listo', entregado:'badge-entregado' };
+    const textos = { pendiente:'Pendiente', listo:'Listo', entregado:'Entregado' };
+    return `<span class="badge ${clases[estado] || ''}" style="font-size:10px;">${textos[estado] || estado}</span>`;
+  }
+
+  async function renderPorCobrar() {
+    const estadoVacio  = document.getElementById('estado-vacio-cobrar');
+    const tablaWrap    = document.getElementById('tabla-cobrar-wrap');
+    const tbody        = document.getElementById('tbody-cobrar');
+    const resumenEl    = document.getElementById('cobrar-resumen');
+    const totalEl      = document.getElementById('cobrar-total');
+    const cargandoEl   = document.getElementById('estado-cargando-cobrar');
+
+    estadoVacio.style.display = 'none';
+    tablaWrap.style.display   = 'none';
+    resumenEl.style.display   = 'none';
+    cargandoEl.style.display  = '';
+
+    const { data, error } = await supabaseClient
+      .from('pedidos')
+      .select('id, estado, total, notas, clientes(nombre)')
+      .in('estado', ['pendiente', 'listo']);
+
+    cargandoEl.style.display = 'none';
+
+    if (error) {
+      mostrarToast('Error al cargar por cobrar.', 'error');
+      estadoVacio.style.display = '';
+      return;
+    }
+
+    const porCobrar = (data || [])
+      .map(p => {
+        const meta = parseNotas(p.notas);
+        return {
+          id:               p.id,
+          cliente:          p.clientes?.nombre || meta.cliente_nombre || 'Cliente general',
+          total:            p.total || 0,
+          estado:           p.estado,
+          anticipo:         meta.anticipo || 0,
+          saldo_pendiente:  meta.saldo_pendiente || 0,
+          fecha_liquidacion: meta.fecha_liquidacion || null,
+          liquidado:        meta.liquidado || false,
+        };
+      })
+      .filter(p => p.saldo_pendiente > 0 && !p.liquidado);
+
+    if (porCobrar.length === 0) {
+      resumenEl.style.display   = 'none';
+      estadoVacio.style.display = '';
+      tablaWrap.style.display   = 'none';
+      return;
+    }
+
+    const totalSaldo = porCobrar.reduce((a, p) => a + p.saldo_pendiente, 0);
+    totalEl.textContent = formatearPeso(totalSaldo);
+    resumenEl.style.display   = '';
+    estadoVacio.style.display = 'none';
+    tablaWrap.style.display   = '';
+
+    tbody.innerHTML = porCobrar.map(p => {
+      const fechaLiq = p.fecha_liquidacion ? fechaCorta(p.fecha_liquidacion) : '—';
+      return `
+        <tr>
+          <td>
+            <div class="negrita">${escaparHTML(p.cliente)}</div>
+            <div style="margin-top:2px;">${badgeEstadoMini(p.estado)}</div>
+          </td>
+          <td style="text-align:right; white-space:nowrap; font-weight:600;">${formatearPeso(p.total)}</td>
+          <td style="text-align:right; white-space:nowrap; color:var(--listo-txt);">${formatearPeso(p.anticipo)}</td>
+          <td style="text-align:right; white-space:nowrap; font-weight:700; color:var(--pendiente-txt);">${formatearPeso(p.saldo_pendiente)}</td>
+          <td style="white-space:nowrap; color:var(--texto-2); font-size:var(--text-sm);">${fechaLiq}</td>
+          <td>
+            <button onclick="abrirModalPago('${p.id}')" class="btn btn-primario btn-sm" style="white-space:nowrap; font-size:var(--text-xs);">
+              <i data-lucide="wallet" style="width:12px;height:12px;"></i>
+              Pago
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    lucide.createIcons();
+  }
+
+
+  /* =====================================================
+     MODAL: REGISTRAR PAGO (Por cobrar)
+     ===================================================== */
+  let pagoPedidoId = null;
+
+  async function abrirModalPago(id) {
+    pagoPedidoId = id;
+
+    const { data: p, error } = await supabaseClient
+      .from('pedidos')
+      .select('id, total, notas, clientes(nombre)')
+      .eq('id', id)
+      .single();
+
+    if (error || !p) {
+      mostrarToast('Error al cargar el pedido.', 'error');
+      return;
+    }
+
+    const meta = parseNotas(p.notas);
+    const clienteNombre = p.clientes?.nombre || meta.cliente_nombre || 'Cliente general';
+    const saldoPendiente = meta.saldo_pendiente || 0;
+
+    document.getElementById('info-pago-cliente').textContent = clienteNombre;
+    document.getElementById('info-pago-total').textContent   = formatearPeso(p.total || 0);
+    document.getElementById('info-pago-saldo').textContent   = formatearPeso(saldoPendiente);
+    document.getElementById('campo-pago-ayuda').textContent  = `Máximo: ${formatearPeso(saldoPendiente)}`;
+    document.getElementById('campo-pago-monto').value        = '';
+    document.getElementById('campo-pago-monto').max          = saldoPendiente;
+
+    document.getElementById('modal-registrar-pago').classList.add('abierto');
+    lucide.createIcons();
+    document.getElementById('campo-pago-monto').focus();
+  }
+
+  function cerrarModalPago() {
+    document.getElementById('modal-registrar-pago').classList.remove('abierto');
+    pagoPedidoId = null;
+  }
+
+  async function guardarPago() {
+    const monto = parseFloat(document.getElementById('campo-pago-monto').value);
+    if (!monto || monto <= 0) {
+      mostrarToast('Ingresa un monto válido.', 'aviso');
+      return;
+    }
+
+    const btn = document.getElementById('btn-confirmar-pago');
+    btn.disabled = true;
+
+    // Obtener el pedido actualizado desde Supabase
+    const { data: p, error: errP } = await supabaseClient
+      .from('pedidos')
+      .select('id, total, notas, clientes(nombre)')
+      .eq('id', pagoPedidoId)
+      .single();
+
+    if (errP || !p) {
+      mostrarToast('Error al cargar el pedido.', 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    const meta = parseNotas(p.notas);
+    const clienteNombre = p.clientes?.nombre || meta.cliente_nombre || 'Cliente general';
+    const saldo = meta.saldo_pendiente || 0;
+
+    if (monto > saldo + 0.01) {
+      mostrarToast('El monto no puede ser mayor al saldo pendiente.', 'aviso');
+      btn.disabled = false;
+      return;
+    }
+
+    const montoReal = Math.min(monto, saldo);
+    const esFinal   = montoReal >= saldo - 0.01;
+
+    // Actualizar notas del pedido con el nuevo saldo
+    const metaActualizada = {
+      ...meta,
+      saldo_pendiente: Math.max(0, saldo - montoReal),
+      liquidado: esFinal ? true : (meta.liquidado || false),
+    };
+
+    const { error: errU } = await supabaseClient
+      .from('pedidos')
+      .update({ notas: JSON.stringify(metaActualizada) })
+      .eq('id', pagoPedidoId);
+
+    if (errU) {
+      mostrarToast('Error al actualizar el pedido.', 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    // Registrar ingreso en transacciones
+    const { error: errTx } = await supabaseClient.from('transacciones').insert({
+      tipo:        'ingreso',
+      descripcion: esFinal ? `Liquidación — ${clienteNombre}` : `Pago parcial — ${clienteNombre}`,
+      monto:       montoReal,
+      fecha:       new Date().toISOString().split('T')[0],
+      pedido_id:   pagoPedidoId,
+    });
+
+    if (errTx) {
+      mostrarToast('Error al registrar la transacción.', 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    cerrarModalPago();
+    await cargarTransacciones();
+
+    const saldoRestante = Math.max(0, saldo - montoReal);
+    const msg = esFinal
+      ? `Pago registrado. Pedido de ${clienteNombre} liquidado.`
+      : `Pago de ${formatearPeso(montoReal)} registrado. Saldo restante: ${formatearPeso(saldoRestante)}.`;
+    mostrarToast(msg, 'exito');
+  }
+
+
+  /* =====================================================
+     RENDER: GASTOS FIJOS (localStorage)
+     ===================================================== */
+  function renderGastosFijos() {
+    const estadoVacio = document.getElementById('estado-vacio-fijos');
+    const tablaWrap   = document.getElementById('tabla-fijos-wrap');
+    const tbody       = document.getElementById('tbody-fijos');
+    const totalEl     = document.getElementById('total-fijos-monto');
+
+    if (gastosFijos.length === 0) {
+      estadoVacio.style.display = '';
+      tablaWrap.style.display   = 'none';
+      return;
+    }
+
+    estadoVacio.style.display = 'none';
+    tablaWrap.style.display   = '';
+
+    const totalMensual = gastosFijos.reduce((a, g) => a + g.monto_mensual, 0);
+    totalEl.textContent = formatearPeso(totalMensual);
+
+    tbody.innerHTML = gastosFijos.map(g => `
+      <tr>
+        <td><div class="negrita">${escaparHTML(g.nombre)}</div></td>
+        <td>
+          ${g.descripcion
+            ? `<span class="truncar" style="display:block; max-width:240px; font-size:var(--text-sm); color:var(--texto-2);">${escaparHTML(g.descripcion)}</span>`
+            : `<span style="color:var(--texto-tenue); font-size:var(--text-sm);">—</span>`}
+        </td>
+        <td style="text-align:right; white-space:nowrap; font-weight:600; color:var(--alerta-txt);">${formatearPeso(g.monto_mensual)}<span style="font-weight:400; color:var(--texto-2); font-size:var(--text-xs);">/mes</span></td>
+        <td>
+          <div class="tabla-acciones">
+            <button onclick="abrirModalGastoFijo(${g.id})" class="btn btn-icono btn-fantasma" title="Editar" aria-label="Editar ${escaparHTML(g.nombre)}">
+              <i data-lucide="pencil" style="width:15px;height:15px;"></i>
+            </button>
+            <button onclick="pedirConfirmacionEliminarFijo(${g.id})" class="btn btn-icono btn-peligro" title="Eliminar" aria-label="Eliminar ${escaparHTML(g.nombre)}">
+              <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    lucide.createIcons();
+  }
+
+
+  /* =====================================================
+     ACTUALIZAR VISTA COMPLETA
+     ===================================================== */
+  function actualizarVista() {
+    calcularKPIs();
+    renderMovimientos();
+    if (tabActual === 'por-cobrar')   renderPorCobrar();
+    if (tabActual === 'gastos-fijos') renderGastosFijos();
+  }
+
+
+  /* =====================================================
+     MODAL: REGISTRAR GASTO (egreso manual → Supabase)
+     ===================================================== */
+  function abrirModalGasto() {
+    limpiarErroresGasto();
+    document.getElementById('form-gasto').reset();
+    document.getElementById('campo-fecha').value = new Date().toISOString().split('T')[0];
+    document.getElementById('modal-gasto').classList.add('abierto');
+    lucide.createIcons();
+    document.getElementById('campo-descripcion').focus();
+  }
+
+  function cerrarModalGasto() {
+    document.getElementById('modal-gasto').classList.remove('abierto');
+    limpiarErroresGasto();
+  }
+
+  function limpiarErroresGasto() {
+    document.querySelectorAll('#form-gasto .campo-input.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('#form-gasto .campo-error-msg').forEach(el => el.remove());
+  }
+
+  function marcarErrorGasto(inputId, mensaje) {
+    const input = document.getElementById(inputId);
+    input.classList.add('error');
+    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('campo-error-msg')) {
+      const msg = document.createElement('div');
+      msg.className = 'texto-error campo-error-msg';
+      msg.textContent = mensaje;
+      input.insertAdjacentElement('afterend', msg);
+    }
+  }
+
+  async function guardarGasto() {
+    limpiarErroresGasto();
+    let valido = true;
+
+    const desc = document.getElementById('campo-descripcion').value.trim();
+    if (!desc) { marcarErrorGasto('campo-descripcion', 'La descripción es obligatoria.'); valido = false; }
+
+    const monto = document.getElementById('campo-monto').value;
+    if (!monto || isNaN(Number(monto)) || Number(monto) <= 0) {
+      marcarErrorGasto('campo-monto', 'Ingresa un monto válido (mayor a 0).'); valido = false;
+    }
+
+    const fecha = document.getElementById('campo-fecha').value;
+    if (!fecha) { marcarErrorGasto('campo-fecha', 'La fecha es obligatoria.'); valido = false; }
+
+    if (!valido) return;
+
+    const btn = document.getElementById('btn-guardar-gasto');
+    btn.disabled = true;
+
+    const { error } = await supabaseClient.from('transacciones').insert({
+      tipo:        'egreso',
+      descripcion: desc,
+      monto:       Number(monto),
+      fecha:       fecha,
+      pedido_id:   null,
+    });
+
+    if (error) {
+      mostrarToast('Error al guardar el gasto.', 'error');
+      btn.disabled = false;
+      return;
+    }
+
+    cerrarModalGasto();
+    await cargarTransacciones();
+    mostrarToast('Gasto registrado correctamente.', 'exito');
+  }
+
+
+  /* =====================================================
+     MODAL: GASTO FIJO — AGREGAR / EDITAR (localStorage)
+     ===================================================== */
+  function abrirModalGastoFijo(id = null) {
+    limpiarErroresFijo();
+    const titulo = document.getElementById('modal-fijo-titulo');
+
+    if (id !== null) {
+      const g = gastosFijos.find(x => x.id === id);
+      if (!g) return;
+      fijoEditandoId = id;
+      titulo.textContent = 'Editar gasto fijo';
+      document.getElementById('campo-fijo-nombre').value = g.nombre;
+      document.getElementById('campo-fijo-monto').value  = g.monto_mensual;
+      document.getElementById('campo-fijo-desc').value   = g.descripcion || '';
+    } else {
+      fijoEditandoId = null;
+      titulo.textContent = 'Agregar gasto fijo';
+      document.getElementById('form-gasto-fijo').reset();
+    }
+
+    document.getElementById('modal-gasto-fijo').classList.add('abierto');
+    lucide.createIcons();
+    document.getElementById('campo-fijo-nombre').focus();
+  }
+
+  function cerrarModalGastoFijo() {
+    document.getElementById('modal-gasto-fijo').classList.remove('abierto');
+    fijoEditandoId = null;
+    limpiarErroresFijo();
+  }
+
+  function limpiarErroresFijo() {
+    document.querySelectorAll('#form-gasto-fijo .campo-input.error, #form-gasto-fijo .campo-textarea.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('#form-gasto-fijo .campo-error-msg').forEach(el => el.remove());
+  }
+
+  function marcarErrorFijo(inputId, mensaje) {
+    const input = document.getElementById(inputId);
+    input.classList.add('error');
+    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('campo-error-msg')) {
+      const msg = document.createElement('div');
+      msg.className = 'texto-error campo-error-msg';
+      msg.textContent = mensaje;
+      input.insertAdjacentElement('afterend', msg);
+    }
+  }
+
+  function guardarGastoFijo() {
+    limpiarErroresFijo();
+    let valido = true;
+
+    const nombre = document.getElementById('campo-fijo-nombre').value.trim();
+    if (!nombre) { marcarErrorFijo('campo-fijo-nombre', 'El nombre es obligatorio.'); valido = false; }
+
+    const monto = document.getElementById('campo-fijo-monto').value;
+    if (!monto || isNaN(Number(monto)) || Number(monto) <= 0) {
+      marcarErrorFijo('campo-fijo-monto', 'Ingresa un monto válido (mayor a 0).'); valido = false;
+    }
+
+    if (!valido) return;
+
+    const datos = {
+      nombre,
+      monto_mensual: Number(monto),
+      descripcion:   document.getElementById('campo-fijo-desc').value.trim()
+    };
+
+    if (fijoEditandoId !== null) {
+      const idx = gastosFijos.findIndex(g => g.id === fijoEditandoId);
+      gastosFijos[idx] = { ...gastosFijos[idx], ...datos };
+      mostrarToast('Gasto fijo actualizado.', 'exito');
+    } else {
+      gastosFijos.push({ id: nextFijoId++, ...datos });
+      mostrarToast('Gasto fijo agregado.', 'exito');
+    }
+
+    lsSet('nn_gastos_fijos', gastosFijos);
+    cerrarModalGastoFijo();
+    renderGastosFijos();
+    calcularKPIs();
+  }
+
+
+  /* =====================================================
+     ELIMINAR GASTO FIJO
+     ===================================================== */
+  function pedirConfirmacionEliminarFijo(id) {
+    const g = gastosFijos.find(x => x.id === id);
+    if (!g) return;
+    fijoElimId = id;
+    document.getElementById('nombre-fijo-eliminar').textContent = g.nombre;
+    document.getElementById('modal-eliminar-fijo').classList.add('abierto');
+    lucide.createIcons();
+  }
+
+  function cerrarModalEliminarFijo() {
+    document.getElementById('modal-eliminar-fijo').classList.remove('abierto');
+    fijoElimId = null;
+  }
+
+  function confirmarEliminarFijo() {
+    if (fijoElimId === null) return;
+    const nombre = gastosFijos.find(g => g.id === fijoElimId)?.nombre || '';
+    gastosFijos = gastosFijos.filter(g => g.id !== fijoElimId);
+    lsSet('nn_gastos_fijos', gastosFijos);
+    cerrarModalEliminarFijo();
+    renderGastosFijos();
+    calcularKPIs();
+    mostrarToast(`"${nombre}" eliminado de gastos fijos.`, 'aviso');
+  }
+
+
+  /* =====================================================
+     TOASTS
+     ===================================================== */
+  function mostrarToast(mensaje, tipo = '') {
+    const contenedor = document.getElementById('toast-contenedor');
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = mensaje;
+    contenedor.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('salir');
+      toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    }, 3000);
+  }
+
+
+  /* =====================================================
+     ANIMACIONES
+     ===================================================== */
+  function iniciarAnimaciones() {
+    const observer = new IntersectionObserver(
+      (entradas) => entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.animar-entrada').forEach(el => observer.observe(el));
+  }
+
+
+  /* =====================================================
+     EVENTOS
+     ===================================================== */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      cerrarModalGasto(); cerrarModalGastoFijo(); cerrarModalEliminarFijo(); cerrarModalPago();
+    }
+  });
+
+  ['modal-gasto', 'modal-gasto-fijo', 'modal-eliminar-fijo', 'modal-registrar-pago'].forEach(id => {
+    document.getElementById(id).addEventListener('click', (e) => {
+      if (e.target !== e.currentTarget) return;
+      if (id === 'modal-gasto')            cerrarModalGasto();
+      if (id === 'modal-gasto-fijo')       cerrarModalGastoFijo();
+      if (id === 'modal-eliminar-fijo')    cerrarModalEliminarFijo();
+      if (id === 'modal-registrar-pago')   cerrarModalPago();
+    });
+  });
+
+  document.getElementById('form-gasto').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); guardarGasto(); }
+  });
+
+  document.getElementById('form-gasto-fijo').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); guardarGastoFijo(); }
+  });
+
+
+  /* =====================================================
+     INICIALIZACIÓN
+     ===================================================== */
+  document.addEventListener('DOMContentLoaded', async () => {
+    lucide.createIcons();
+    iniciarAnimaciones();
+
+    // Mostrar estado de carga inicial en movimientos
+    document.getElementById('estado-cargando-movimientos').style.display = '';
+
+    await cargarTransacciones();
+
+    document.getElementById('estado-cargando-movimientos').style.display = 'none';
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('nuevo') === 'egreso') abrirModalGasto();
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novedades Noely — Acceso</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Layout centrado para login — no usa .app ni sidebar */
+    .login-pagina {
+      min-height: 100vh;
+      background: var(--lienzo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s-6);
+    }
+
+    .login-tarjeta {
+      background: var(--tarjeta);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      padding: var(--s-10) var(--s-10);
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--sombra-2);
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-8);
+    }
+
+    .login-logo-icono {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .login-logo-texto {
+      font-family: var(--fuente-titulo);
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--texto);
+      line-height: 1.2;
+    }
+
+    .login-logo-subtitulo {
+      font-size: var(--text-xs);
+      color: var(--texto-2);
+    }
+
+    .login-titulo {
+      font-family: var(--fuente-titulo);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      color: var(--texto);
+      margin-bottom: var(--s-1);
+    }
+
+    .login-subtitulo {
+      font-size: var(--text-sm);
+      color: var(--texto-2);
+      margin-bottom: var(--s-8);
+    }
+
+    .login-error {
+      background: var(--alerta-bg);
+      border: 1px solid #FECACA;
+      border-radius: var(--radio-md);
+      padding: var(--s-3) var(--s-4);
+      font-size: var(--text-sm);
+      color: var(--alerta-txt);
+      margin-bottom: var(--s-5);
+      display: none;
+    }
+
+    .login-error.visible {
+      display: block;
+    }
+
+    .login-btn-entrar {
+      width: 100%;
+      justify-content: center;
+      padding: var(--s-3) var(--s-5);
+      font-size: var(--text-base);
+    }
+
+    .login-spinner {
+      display: none;
+    }
+
+    .login-btn-entrar.cargando .login-spinner {
+      display: block;
+    }
+
+    .login-btn-entrar.cargando .login-btn-texto {
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .login-tarjeta {
+        padding: var(--s-8) var(--s-6);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-pagina">
+  <div class="login-tarjeta">
+
+    <!-- Logo -->
+    <div class="login-logo">
+      <svg class="login-logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="4" fill="#F472B6"/>
+        <ellipse cx="16" cy="8"  rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="16" cy="24" rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="8"  cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="24" cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="10.3" cy="10.3" rx="3" ry="5" transform="rotate(-45 10.3 10.3)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="21.7" rx="3" ry="5" transform="rotate(-45 21.7 21.7)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="10.3" rx="3" ry="5" transform="rotate(45 21.7 10.3)"  fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="10.3" cy="21.7" rx="3" ry="5" transform="rotate(45 10.3 21.7)"  fill="#DB2777" opacity="0.45"/>
+      </svg>
+      <div>
+        <div class="login-logo-texto">Novedades Noely</div>
+        <div class="login-logo-subtitulo">Panel de administración</div>
+      </div>
+    </div>
+
+    <!-- Encabezado -->
+    <h1 class="login-titulo">Bienvenida</h1>
+    <p class="login-subtitulo">Ingresa con tu correo y contraseña para continuar.</p>
+
+    <!-- Mensaje de error -->
+    <div class="login-error" id="login-error" role="alert"></div>
+
+    <!-- Formulario -->
+    <form id="form-login" novalidate>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-email">Correo electrónico</label>
+        <input
+          class="campo-input"
+          type="email"
+          id="campo-email"
+          name="email"
+          autocomplete="email"
+          placeholder="tu@correo.com"
+          required
+        />
+      </div>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-password">Contraseña</label>
+        <input
+          class="campo-input"
+          type="password"
+          id="campo-password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primario login-btn-entrar" id="btn-entrar">
+        <span class="spinner login-spinner" aria-hidden="true"></span>
+        <span class="login-btn-texto">Entrar</span>
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+
+  const formLogin   = document.getElementById('form-login');
+  const btnEntrar   = document.getElementById('btn-entrar');
+  const errorDiv    = document.getElementById('login-error');
+  const campoEmail  = document.getElementById('campo-email');
+  const campoPwd    = document.getElementById('campo-password');
+
+  /* Si ya hay sesión activa, redirigir al panel */
+  (async () => {
+    if (!supabaseClient) return;
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) window.location.replace('index.html');
+  })();
+
+  function mostrarError(msg) {
+    errorDiv.textContent = msg;
+    errorDiv.classList.add('visible');
+  }
+
+  function ocultarError() {
+    errorDiv.classList.remove('visible');
+    errorDiv.textContent = '';
+  }
+
+  function setCargando(activo) {
+    btnEntrar.disabled = activo;
+    btnEntrar.classList.toggle('cargando', activo);
+  }
+
+  formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ocultarError();
+
+    const email    = campoEmail.value.trim();
+    const password = campoPwd.value;
+
+    /* Validación básica */
+    if (!email || !password) {
+      mostrarError('Por favor ingresa tu correo y contraseña.');
+      return;
+    }
+
+    if (!supabaseClient) {
+      mostrarError('Error de configuración. Contacta al administrador.');
+      return;
+    }
+
+    setCargando(true);
+
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+    setCargando(false);
+
+    if (error) {
+      /* Mensaje amigable sin exponer detalles internos */
+      if (error.message.toLowerCase().includes('invalid login')) {
+        mostrarError('Correo o contraseña incorrectos. Intenta de nuevo.');
+      } else {
+        mostrarError('No se pudo iniciar sesión. Intenta más tarde.');
+      }
+      campoPwd.value = '';
+      campoPwd.focus();
+      return;
+    }
+
+    window.location.replace('index.html');
+  });
+
+</script>
+</body>
+</html>

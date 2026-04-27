@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novedades Noely — Clientes</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="sidebar" role="navigation" aria-label="Menú principal">
+    <div class="sidebar-logo">
+      <svg class="sidebar-logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="16" cy="16" r="4" fill="#F472B6"/>
+        <ellipse cx="16" cy="8"  rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="16" cy="24" rx="3" ry="5" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="8"  cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="24" cy="16" rx="5" ry="3" fill="#F472B6" opacity="0.7"/>
+        <ellipse cx="10.3" cy="10.3" rx="3" ry="5" transform="rotate(-45 10.3 10.3)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="21.7" rx="3" ry="5" transform="rotate(-45 21.7 21.7)" fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="21.7" cy="10.3" rx="3" ry="5" transform="rotate(45 21.7 10.3)"  fill="#DB2777" opacity="0.45"/>
+        <ellipse cx="10.3" cy="21.7" rx="3" ry="5" transform="rotate(45 10.3 21.7)"  fill="#DB2777" opacity="0.45"/>
+      </svg>
+      <div>
+        <div class="sidebar-logo-texto">Novedades Noely</div>
+        <div class="sidebar-logo-subtitulo">Panel de administración</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item">
+        <i data-lucide="layout-dashboard" class="nav-icono"></i>
+        Inicio
+      </a>
+      <div class="sidebar-seccion-titulo">Negocio</div>
+      <a href="inventario.html" class="nav-item">
+        <i data-lucide="package" class="nav-icono"></i>
+        Inventario
+      </a>
+      <a href="pedidos.html" class="nav-item">
+        <i data-lucide="shopping-bag" class="nav-icono"></i>
+        Pedidos
+      </a>
+      <a href="clientes.html" class="nav-item activo">
+        <i data-lucide="users" class="nav-icono"></i>
+        Clientes
+      </a>
+      <div class="sidebar-seccion-titulo">Dinero</div>
+      <a href="finanzas.html" class="nav-item">
+        <i data-lucide="bar-chart-2" class="nav-icono"></i>
+        Finanzas
+      </a>
+    </nav>
+
+    <div class="sidebar-flor" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="8" fill="currentColor"/>
+        <ellipse cx="40" cy="18" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="40" cy="62" rx="7" ry="14" fill="currentColor"/>
+        <ellipse cx="18" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="62" cy="40" rx="14" ry="7" fill="currentColor"/>
+        <ellipse cx="23" cy="23" rx="7" ry="13" transform="rotate(-45 23 23)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="57" rx="7" ry="13" transform="rotate(-45 57 57)" fill="currentColor" opacity="0.6"/>
+        <ellipse cx="57" cy="23" rx="7" ry="13" transform="rotate(45 57 23)"  fill="currentColor" opacity="0.6"/>
+        <ellipse cx="23" cy="57" rx="7" ry="13" transform="rotate(45 23 57)"  fill="currentColor" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="nav-item w-full" onclick="cerrarSesion()">
+        <i data-lucide="log-out" class="nav-icono"></i>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="contenido-principal">
+
+    <header class="pagina-header">
+      <div class="pagina-header-texto">
+        <h1>Clientes</h1>
+        <p>Directorio de clientas</p>
+      </div>
+      <button onclick="abrirModal()" class="btn btn-primario">
+        <i data-lucide="user-plus" class="icono"></i>
+        Agregar cliente
+      </button>
+    </header>
+
+    <div class="pagina-cuerpo">
+
+      <div class="campo mb-6" style="max-width:360px;">
+        <div class="campo-con-icono">
+          <i data-lucide="search" class="campo-icono"></i>
+          <input
+            type="search"
+            class="campo-input"
+            id="buscador-clientes"
+            placeholder="Buscar por nombre o teléfono..."
+            oninput="filtrarClientes()"
+          />
+        </div>
+      </div>
+
+      <div class="tarjeta animar-entrada">
+        <div class="tarjeta-cabecera">
+          <span class="tarjeta-titulo">Todas las clientas</span>
+          <span class="badge badge-rosa" id="conteo-clientes" style="display:none"></span>
+        </div>
+
+        <div id="estado-cargando" style="text-align:center; padding:40px 0; color:var(--texto-2);">
+          <div class="spinner" style="margin:0 auto 12px;"></div>
+          Cargando clientes...
+        </div>
+
+        <div class="estado-vacio" id="estado-vacio-clientes" style="display:none;">
+          <i data-lucide="users" class="estado-vacio-icono"></i>
+          <div class="estado-vacio-titulo">Sin clientes aún</div>
+          <p>Registra a tu primera clienta para llevar un historial de sus pedidos.</p>
+          <button onclick="abrirModal()" class="btn btn-primario">
+            <i data-lucide="user-plus" class="icono"></i>
+            Agregar primera clienta
+          </button>
+        </div>
+
+        <div class="tabla-contenedor" id="tabla-wrap" style="display:none; border:none; border-radius:0;">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Notas</th>
+                <th style="text-align:center;">Pedidos</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody-clientes"></tbody>
+          </table>
+        </div>
+
+        <div class="estado-vacio" id="estado-sin-resultados" style="display:none;">
+          <i data-lucide="search-x" class="estado-vacio-icono"></i>
+          <div class="estado-vacio-titulo">Sin resultados</div>
+          <p>No se encontró ninguna clienta con esa búsqueda.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="nav-movil" role="navigation" aria-label="Navegación móvil">
+    <ul class="nav-movil-lista">
+      <li><a href="index.html"      class="nav-movil-item"><i data-lucide="layout-dashboard"></i>Inicio</a></li>
+      <li><a href="inventario.html" class="nav-movil-item"><i data-lucide="package"></i>Inventario</a></li>
+      <li><a href="pedidos.html"    class="nav-movil-item"><i data-lucide="shopping-bag"></i>Pedidos</a></li>
+      <li><a href="clientes.html"   class="nav-movil-item activo"><i data-lucide="users"></i>Clientes</a></li>
+      <li><a href="finanzas.html"   class="nav-movil-item"><i data-lucide="bar-chart-2"></i>Finanzas</a></li>
+    </ul>
+  </nav>
+
+</div>
+
+
+<!-- MODAL: AGREGAR / EDITAR CLIENTE -->
+<div class="modal-overlay" id="modal-cliente" role="dialog" aria-modal="true" aria-labelledby="modal-cliente-titulo">
+  <div class="modal" style="max-width:480px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-cliente-titulo">Agregar cliente</h3>
+      <button onclick="cerrarModal()" class="btn btn-icono btn-fantasma" aria-label="Cerrar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <form id="form-cliente" onsubmit="return false" novalidate>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-nombre">Nombre completo</label>
+        <input type="text" id="campo-nombre" class="campo-input" placeholder="Ej. María Guadalupe Reyes" maxlength="120" />
+      </div>
+
+      <div class="campo">
+        <label class="campo-label requerido" for="campo-telefono">Teléfono</label>
+        <input type="tel" id="campo-telefono" class="campo-input" placeholder="Ej. 555-234-5678" maxlength="20" />
+      </div>
+
+      <div class="campo">
+        <label class="campo-label" for="campo-notas">Notas</label>
+        <textarea id="campo-notas" class="campo-textarea" placeholder="Preferencias, fechas importantes..." rows="3" maxlength="300"></textarea>
+      </div>
+
+    </form>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModal()" class="btn btn-secundario">Cancelar</button>
+      <button id="btn-guardar-cliente" onclick="guardarCliente()" class="btn btn-primario">
+        <i data-lucide="check" class="icono"></i>
+        Guardar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL: CONFIRMAR ELIMINACIÓN -->
+<div class="modal-overlay" id="modal-eliminar" role="alertdialog" aria-modal="true" aria-labelledby="modal-eliminar-titulo">
+  <div class="modal" style="max-width:400px;">
+
+    <div class="modal-cabecera">
+      <h3 class="modal-titulo" id="modal-eliminar-titulo">Eliminar cliente</h3>
+    </div>
+
+    <p style="margin-bottom:8px;">
+      ¿Estás segura de que quieres eliminar a
+      <strong id="nombre-a-eliminar"></strong>?
+    </p>
+    <p style="font-size:13px; color:var(--texto-2);">Esta acción no se puede deshacer.</p>
+
+    <div class="modal-pie">
+      <button onclick="cerrarModalEliminar()" class="btn btn-secundario">Cancelar</button>
+      <button onclick="confirmarEliminar()" class="btn btn-peligro">
+        <i data-lucide="trash-2" class="icono"></i>
+        Eliminar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="toast-contenedor" id="toast-contenedor" aria-live="polite"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.10/dist/umd/supabase.min.js"></script>
+<script src="js/env.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+  /* =====================================================
+     ESTADO
+     ===================================================== */
+  let clientes          = [];
+  let clienteEditandoId = null;
+  let clienteElimId     = null;
+
+
+  /* =====================================================
+     FORMATO
+     ===================================================== */
+  function escaparHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+
+  /* =====================================================
+     CARGA DESDE SUPABASE
+     ===================================================== */
+  async function cargarClientes() {
+    document.getElementById('estado-cargando').style.display       = '';
+    document.getElementById('tabla-wrap').style.display             = 'none';
+    document.getElementById('estado-vacio-clientes').style.display  = 'none';
+    document.getElementById('estado-sin-resultados').style.display  = 'none';
+
+    const [{ data: clientesData, error }, { data: pedidosCounts }] = await Promise.all([
+      supabaseClient.from('clientes').select('*').order('nombre'),
+      supabaseClient.from('pedidos').select('cliente_id').not('cliente_id', 'is', null)
+    ]);
+
+    document.getElementById('estado-cargando').style.display = 'none';
+
+    if (error) { mostrarToast('Error al cargar clientes: ' + error.message, 'aviso'); return; }
+
+    // Calcular pedidos por cliente
+    const countMap = {};
+    (pedidosCounts || []).forEach(p => {
+      if (p.cliente_id) countMap[p.cliente_id] = (countMap[p.cliente_id] || 0) + 1;
+    });
+
+    clientes = (clientesData || []).map(c => ({ ...c, pedidos_count: countMap[c.id] || 0 }));
+    filtrarClientes();
+  }
+
+
+  /* =====================================================
+     RENDER
+     ===================================================== */
+  function renderTabla(lista) {
+    const tbody         = document.getElementById('tbody-clientes');
+    const estadoVacio   = document.getElementById('estado-vacio-clientes');
+    const sinResultados = document.getElementById('estado-sin-resultados');
+    const tablaWrap     = document.getElementById('tabla-wrap');
+    const conteo        = document.getElementById('conteo-clientes');
+    const hayBusqueda   = document.getElementById('buscador-clientes').value.trim() !== '';
+
+    if (clientes.length === 0) {
+      estadoVacio.style.display   = '';
+      tablaWrap.style.display     = 'none';
+      sinResultados.style.display = 'none';
+      conteo.style.display        = 'none';
+      return;
+    }
+
+    estadoVacio.style.display = 'none';
+
+    if (lista.length === 0 && hayBusqueda) {
+      tablaWrap.style.display     = 'none';
+      sinResultados.style.display = '';
+      conteo.style.display        = 'none';
+      return;
+    }
+
+    sinResultados.style.display = 'none';
+    tablaWrap.style.display     = '';
+    conteo.textContent          = `${clientes.length} cliente${clientes.length !== 1 ? 's' : ''}`;
+    conteo.style.display        = '';
+
+    // Sanitiza el teléfono para uso en href="tel:..."
+    // Solo permite dígitos, +, -, espacios, puntos y paréntesis. Evita inyección de esquemas tipo javascript:
+    const sanitizarTelHref = (tel) => (tel || '').toString().replace(/[^0-9+\-\s().]/g, '');
+
+    tbody.innerHTML = lista.map(c => `
+      <tr>
+        <td><div class="negrita">${escaparHTML(c.nombre)}</div></td>
+        <td style="white-space:nowrap;">
+          <a href="tel:${escaparHTML(sanitizarTelHref(c.telefono))}" style="color:var(--texto);text-decoration:none;">${escaparHTML(c.telefono)}</a>
+        </td>
+        <td>
+          ${c.notas
+            ? `<span class="truncar" style="display:block;max-width:220px;font-size:var(--text-sm);color:var(--texto-2);">${escaparHTML(c.notas)}</span>`
+            : `<span style="color:var(--texto-tenue);font-size:var(--text-sm);">—</span>`}
+        </td>
+        <td style="text-align:center;">
+          <span class="badge badge-rosa">${c.pedidos_count || 0}</span>
+        </td>
+        <td>
+          <div class="tabla-acciones">
+            <button onclick="abrirModal('${c.id}')" class="btn btn-icono btn-fantasma" title="Editar" aria-label="Editar ${escaparHTML(c.nombre)}">
+              <i data-lucide="pencil" style="width:15px;height:15px;"></i>
+            </button>
+            <button onclick="pedirConfirmacionEliminar('${c.id}')" class="btn btn-icono btn-peligro" title="Eliminar" aria-label="Eliminar ${escaparHTML(c.nombre)}">
+              <i data-lucide="trash-2" style="width:15px;height:15px;"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    lucide.createIcons();
+  }
+
+
+  /* =====================================================
+     BÚSQUEDA (cliente-side sobre datos ya cargados)
+     ===================================================== */
+  function filtrarClientes() {
+    const query = document.getElementById('buscador-clientes').value.trim().toLowerCase();
+    if (!query) { renderTabla(clientes); return; }
+    const filtrados = clientes.filter(c =>
+      c.nombre.toLowerCase().includes(query) || (c.telefono || '').toLowerCase().includes(query)
+    );
+    renderTabla(filtrados);
+  }
+
+
+  /* =====================================================
+     MODAL AGREGAR / EDITAR
+     ===================================================== */
+  function abrirModal(id = null) {
+    limpiarErrores();
+    const titulo = document.getElementById('modal-cliente-titulo');
+
+    if (id !== null) {
+      const c = clientes.find(x => x.id === id);
+      if (!c) return;
+      clienteEditandoId = id;
+      titulo.textContent = 'Editar cliente';
+      document.getElementById('campo-nombre').value   = c.nombre;
+      document.getElementById('campo-telefono').value = c.telefono;
+      document.getElementById('campo-notas').value    = c.notas || '';
+    } else {
+      clienteEditandoId = null;
+      titulo.textContent = 'Agregar cliente';
+      document.getElementById('form-cliente').reset();
+    }
+
+    document.getElementById('modal-cliente').classList.add('abierto');
+    lucide.createIcons();
+    document.getElementById('campo-nombre').focus();
+  }
+
+  function cerrarModal() {
+    document.getElementById('modal-cliente').classList.remove('abierto');
+    clienteEditandoId = null;
+    limpiarErrores();
+  }
+
+
+  /* =====================================================
+     VALIDACIÓN
+     ===================================================== */
+  function limpiarErrores() {
+    document.querySelectorAll('.campo-input.error, .campo-textarea.error').forEach(el => el.classList.remove('error'));
+    document.querySelectorAll('.campo-error-msg').forEach(el => el.remove());
+  }
+
+  function marcarError(inputId, mensaje) {
+    const input = document.getElementById(inputId);
+    input.classList.add('error');
+    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('campo-error-msg')) {
+      const msg = document.createElement('div');
+      msg.className = 'texto-error campo-error-msg';
+      msg.textContent = mensaje;
+      input.insertAdjacentElement('afterend', msg);
+    }
+  }
+
+  function validarFormulario() {
+    limpiarErrores();
+    let valido = true;
+    const nombre = document.getElementById('campo-nombre').value.trim();
+    if (!nombre) { marcarError('campo-nombre', 'El nombre es obligatorio.'); valido = false; }
+    const telefono = document.getElementById('campo-telefono').value.trim();
+    if (!telefono || telefono.length < 7) { marcarError('campo-telefono', 'Ingresa un teléfono válido (mínimo 7 caracteres).'); valido = false; }
+    return valido;
+  }
+
+
+  /* =====================================================
+     GUARDAR CLIENTE (Supabase)
+     ===================================================== */
+  async function guardarCliente() {
+    if (!validarFormulario()) return;
+
+    const datos = {
+      nombre:   document.getElementById('campo-nombre').value.trim(),
+      telefono: document.getElementById('campo-telefono').value.trim(),
+      notas:    document.getElementById('campo-notas').value.trim(),
+    };
+
+    const btn = document.getElementById('btn-guardar-cliente');
+    btn.disabled = true;
+
+    let error;
+    if (clienteEditandoId !== null) {
+      ({ error } = await supabaseClient.from('clientes').update(datos).eq('id', clienteEditandoId));
+      if (!error) mostrarToast('Cliente actualizado correctamente.', 'exito');
+    } else {
+      ({ error } = await supabaseClient.from('clientes').insert(datos));
+      if (!error) mostrarToast('Cliente agregado al directorio.', 'exito');
+    }
+
+    btn.disabled = false;
+
+    if (error) { mostrarToast('Error: ' + error.message, 'aviso'); return; }
+
+    cerrarModal();
+    await cargarClientes();
+  }
+
+
+  /* =====================================================
+     ELIMINAR CLIENTE (Supabase)
+     ===================================================== */
+  function pedirConfirmacionEliminar(id) {
+    const c = clientes.find(x => x.id === id);
+    if (!c) return;
+    clienteElimId = id;
+    document.getElementById('nombre-a-eliminar').textContent = c.nombre;
+    document.getElementById('modal-eliminar').classList.add('abierto');
+    lucide.createIcons();
+  }
+
+  function cerrarModalEliminar() {
+    document.getElementById('modal-eliminar').classList.remove('abierto');
+    clienteElimId = null;
+  }
+
+  async function confirmarEliminar() {
+    if (clienteElimId === null) return;
+    const nombre = clientes.find(c => c.id === clienteElimId)?.nombre || 'Cliente';
+
+    const { error } = await supabaseClient.from('clientes').delete().eq('id', clienteElimId);
+    if (error) { mostrarToast('Error al eliminar: ' + error.message, 'aviso'); return; }
+
+    cerrarModalEliminar();
+    mostrarToast(`"${nombre}" eliminado del directorio.`, 'aviso');
+    await cargarClientes();
+  }
+
+
+  /* =====================================================
+     TOASTS
+     ===================================================== */
+  function mostrarToast(mensaje, tipo = '') {
+    const contenedor = document.getElementById('toast-contenedor');
+    const toast = document.createElement('div');
+    toast.className = `toast ${tipo}`;
+    toast.textContent = mensaje;
+    contenedor.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('salir');
+      toast.addEventListener('animationend', () => toast.remove(), { once: true });
+    }, 3000);
+  }
+
+
+  /* =====================================================
+     ANIMACIONES
+     ===================================================== */
+  function iniciarAnimaciones() {
+    const observer = new IntersectionObserver(
+      (entradas) => entradas.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.animar-entrada').forEach(el => observer.observe(el));
+  }
+
+
+  /* =====================================================
+     EVENTOS
+     ===================================================== */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { cerrarModal(); cerrarModalEliminar(); }
+  });
+
+  document.getElementById('modal-cliente').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) cerrarModal();
+  });
+  document.getElementById('modal-eliminar').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) cerrarModalEliminar();
+  });
+
+  document.getElementById('form-cliente').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') { e.preventDefault(); guardarCliente(); }
+  });
+
+
+  /* =====================================================
+     INICIALIZACIÓN
+     ===================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    iniciarAnimaciones();
+    cargarClientes();
+  });
+
+</script>
+</body>
+</html>

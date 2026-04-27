@@ -1,0 +1,36 @@
+# ============================================
+# NOVEDADES NOELY — Configuración de Netlify
+# ============================================
+
+[build]
+  publish  = "."
+  functions = "netlify/functions"
+
+# Redirige /js/env.js a la función que inyecta
+# las credenciales desde variables de entorno.
+# Localmente, el archivo js/env.js real toma prioridad
+# (Netlify Dev sirve archivos antes que funciones).
+[[redirects]]
+  from   = "/js/env.js"
+  to     = "/.netlify/functions/env"
+  status = 200
+  force  = false
+
+# ============================================
+# Headers de seguridad
+# ============================================
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    X-Content-Type-Options    = "nosniff"
+    X-Frame-Options           = "DENY"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "geolocation=(), microphone=(), camera=(), payment=(), usb=()"
+    Content-Security-Policy   = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+
+# Sin caché para el script de credenciales
+[[headers]]
+  for = "/js/env.js"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
